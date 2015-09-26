@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var sportId="{{athlete.athletic_item_id}}";
+        var userId="{{athlete.account.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+{% include "frontend/header.html" %}
+
+<script type="text/template" id="waterfallTpl">
+    {@each results as r}
+    <li class="waterfall-item">
+        <a href="${r.details.image}" target="_blank">
+            <img src="${r.details.image}" width="${r.details.width}" height="${r.details.height}">
+        </a>
+    </li>
+    {@/each}
+</script>
+
+
+<div class="section">
+    <h2 class="singleTitle icon5">个人项目主页&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">{{athlete.athletic_item.name}}</span></h2>
+    <div class="content infoContainer content1 col2">
+
+        <a href="user/{{athlete.account.id}}/me" class="leftCol leftCol1">
+            <img class="widthAll" src="{{athlete.account.user_profile}}">
+        </a>
+        <div class="rightCol">
+            <div class="titleContainer">
+                {% if current_user.is_authenticated() and current_user.id==athlete.account.id %}
+                <input class="btn fRight" id="unJoinSports" value="退出项目">
+                <input class="btn fRight" id="editInfo" value="修改资料">
+                {% endif %}
+                <h3  class="title title1">{{athlete.account.fullname}}</h3>
+            </div>
+            {% if athlete.info %}
+            <span class="intro">
+                <label>擅长:</label>
+                <span>{{athlete.info.goodAt}}</span>
+            </span>
+            <span class="intro">
+                <label>号码:</label>
+                <span>{{athlete.info.number}}</span>
+            </span>
+            <span class="intro">
+                <label>球龄:</label>
+                <span>{{athlete.info.sportAge}}</span>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if athlete.account.competition_prizes %}
+<div class="section section1">
+    <h3  class="sTitle">荣誉榜</h3>
+    <ul class="list11">
+        <span class="seg seg1">分割线</span>
+        {% for cp in athlete.account.competition_prizes %}
+        <li>
+            <a href="user/competitions/{{cp.competition_team.competition.id}}">
+                <span class="awards">{{cp.prize}}</span>
+                <h4 class="title ellipsis">{{cp.competition_team.competition.name}}</h4>
+            </a>
+        </li>
+        {% endfor %}
+
+    </ul>
+</div>
+{% endif %}
+
+{% if athlete.account.recent_fixture %}
+
+<div class="section section1">
+    <h3  class="sTitle">比赛</h3>
+    <ul class="list8">
+        {% for rf in athlete.account.recent_fixture %}
+        {% if loop.index<=4 %}
+        <li class="status{{rf.status}}">
+            <a href="user/{{rf.competition_id}}/competition-fixtures/{{rf.id}}">
+
+                <div class="player">
+                    <img src="{{ rf.p1_competition_team.team.creator.user_profile  if
+                    rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}">
+                        {{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}
+                          </span>
+                </div>
+                    <span class="info iconVs">
+                        {% if rf.p1_score or rf.p1_score==0 %}
+                        <span class="score">{{rf.p1_score}}:{{rf.p2_score}}</span>
+                        {% endif %}
+                    </span>
+                <div class="player">
+                    <img src="{{ rf.p2_competition_team.team.creator.user_profile  if
+                    rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}">
+                        {{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}
+                          </span>
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/{{athlete.account.id}}/athletics/{{athlete.athletic_item_id}}/fixtures?type=userSport" class="btn rightBtn">更多比赛</a>
+</div>
+{% endif %}
+
+{% if athlete.account.recent_competitions %}
+<div class="section section1">
+    <h3  class="sTitle">赛事统计</h3>
+    <ul class="list10">
+        {% for rc in athlete.account.recent_competitions %}
+        {% if loop.index<=4 %}
+        <li class="status{{rc.competition.status}}">
+            {% if rc.competition.status>=1 %}
+            <a href="user/competitions/{{rc.competition.id}}">
+                {% else %}
+                <a href="user/competitions/{{rc.competition.id}}/register">
+                    {% endif %}
+                <img class="thumb" src="{{rc.competition.logo}}">
+                <h3 class="title ellipsis">{{rc.competition.name}}</h3>
+
+                <p class="intro">
+                    <label class="introC">名次</label>
+                    {% if rc.prize %}
+                    <span class="introC">{{rc.prize}}</span>
+                    {% endif %}
+                </p>
+                <p class="intro">
+                    <label class="introC">胜/负/平</label>
+                    {% if rc.latest_rank and rc.competition.status>=1 %}
+                     <span class="introC">{{rc.latest_rank.addition.won}}/
+                        {{rc.latest_rank.addition.lost}}/
+                        {{rc.latest_rank.addition.drawn}}
+                    </span>
+                    {% endif %}
+                </p>
+                <p class="intro">
+                    <label class="introC">净失球</label>
+                    {% if rc.latest_rank and rc.competition.status>=1 %}
+                    <span class="introC">{{rc.latest_rank.addition.goals_for}}/
+                        {{rc.latest_rank.addition.goals_against}}
+                    </span>
+                    {% endif %}
+                </p>
+
+                <p class="intro">
+                    <label class="introC">积分</label>
+                    {% if rc.latest_rank and rc.c_type==2%}
+                    <span class="introC">{{rc.latest_rank.pts}}</span>
+                    {% endif %}
+                </p>
+
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/{{athlete.account.id}}/athletics/{{athlete.athletic_item_id}}/competitions?type=userSport" class="btn rightBtn">更多赛事</a>
+</div>
+{% endif %}
+
+
+<div class="section section1">
+    <h3  class="sTitle">精彩记忆</h3>
+    <ul id="waterfallContainer">
+
+    </ul>
+    <!--<a href="templates/frontend/moreSplendid.html" class="btn rightBtn">更多精彩</a>-->
+</div>
+
+{% include "frontend/footer.html" %}
+
+</div>
+
+<div class="popWindow hidden" id="popWindow">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight" id="closePopWindow">X</span>
+        <div class="content">
+            <form class="vForm" method="post"
+                  action="user/{{athlete.account.id}}/athletics/{{athlete.athletic_item_id}}/update" id="myForm">
+                {% if athlete.info%}
+                <div class="formRow">
+                    <label class="formLabel">擅长:</label>
+                    <input class="formInput" type="text" name="goodAt" value="{{athlete.info.goodAt}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">号码:</label>
+                    <input class="formInput" type="text" name="number"  value="{{athlete.info.number}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">球龄*:</label>
+                    <input class="formInput" type="text" name="sportAge"  value="{{athlete.info.sportAge}}">
+                </div>
+                {% else %}
+                <div class="formRow">
+                    <label class="formLabel">擅长:</label>
+                    <input class="formInput" type="text" name="goodAt">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">号码:</label>
+                    <input class="formInput" type="text" name="number">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">球龄*:</label>
+                    <input class="formInput" type="text" name="sportAge">
+                </div>
+                {% endif %}
+
+                <input type="submit" value="保存" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/mySportsHome.js"></script>
+</body>
+</html>

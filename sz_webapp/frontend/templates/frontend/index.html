@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>石竹运动</title>
+    <base href="http://localhost/pink/">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="index";
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <script src="templates/frontend/header.js"></script>
+
+        <script type="text/template" id="resultTpl">
+            {@if !noData}
+            {@each results as r}
+            <li style="padding-left:15%">
+                {@if r.status==0}
+                <a href="templates/frontend/competitionDetail.html">
+                    {@else}
+                    <a href="templates/frontend/competitionDetailIng.html">
+                        {@/if}
+                        <img class="thumb" src="${r.image}">
+                        <div class="info">
+                            <div class="titleContainer">
+                                {@if r.status==0}
+                                <span class="status tColor2">报名截止：${r.deadline}</span>
+                                {@else if r.status==1}
+                                <span class="status tColor1">进行中...</span>
+                                {@else}
+                                <span class="status tColor1">已结束</span>
+                                {@/if}
+
+                                <h3 class="title ellipsis">${r.name}</h3>
+                            </div>
+                            <span class="intro">
+                                <label>项目:</label>
+                                <span>${r.category}</span>
+                            </span>
+                            <span class="intro">
+                                <label>类型:</label>
+                                <span>${r.typeTxt}</span>
+                            </span>
+                            <span class="intro">
+                                <label>城市:</label>
+                                <span>${r.location.province}/${r.location.city}/${r.location.area}</span>
+                            </span>
+                            <span class="intro">
+                                <label>开赛时间:</label>
+                                <span>${r.startDate}</span>
+                            </span>
+                            <span class="intro">
+                                <label>已报名:</label>
+                                <span>${r.quota}</span>
+                            </span>
+                            <br>
+                            <span class="intro">
+                                <label class="introTxtLabel">主办:</label>
+                                <span class="introTxt ellipsis">${r.host}</span>
+                            </span>
+                            <span class="intro">
+                                <label class="introTxtLabel">承办:</label>
+                                <span class="introTxt ellipsis">${r.undertake}</span>
+                            </span>
+                            <span class="intro">
+                                <label class="introTxtLabel">赞助:</label>
+                                <span class="introTxt ellipsis">${r.sponsor}</span>
+                            </span>
+                        </div>
+                    </a>
+            </li>
+            {@/each}
+            {@else}
+            <li class="tColor1 noData">${noData}</li>
+            {@/if}
+        </script>
+
+        <div class="roll">
+            <img  class="widthAll"  src="data/frontend/images/banner1.jpg">
+        </div>
+        <div class="section">
+            <div class="titles">
+                <h1 class="title">赛事公告</h1>
+                <h3 class="subTitle">各种热门赛事</h3>
+            </div>
+            <ul class="list3" id="myList">
+
+            </ul>
+            <a class="more" href="#">查看更多</a>
+        </div>
+        <div class="section">
+            <div class="titles titles1">
+                <h1 class="title">万余场地，等你来战</h1>
+                <h3 class="subTitle">找到你所需要的场地</h3>
+            </div>
+            <img src="data/frontend/images/banner2.jpg">
+            <a class="more more1" href="#">查看更多</a>
+        </div>
+        <div class="section">
+            <div class="titles">
+                <h1 class="title">公司新闻</h1>
+                <h3 class="subTitle">公司的各种新闻</h3>
+            </div>
+            <ul class="list">
+                <li><a href="#">
+                    <span class="date">2015-04-23</span>
+                    <h4 class="title ellipsis">xxxxxxxxxxxxxxxxx</h4>
+                </a></li>
+                <li><a href="#">
+                    <span class="date">2015-04-23</span>
+                    <h4 class="title ellipsis">xxxxxxxxxxxxxxxxx</h4>
+                </a></li>
+                <li><a href="#">
+                    <span class="date">2015-04-23</span>
+                    <h4 class="title ellipsis">xxxxxxxxxxxxxxxxx</h4>
+                </a></li>
+            </ul>
+            <a class="more" href="#">查看更多</a>
+        </div>
+
+        <script src="templates/frontend/footer.js"></script>
+    </div>
+
+    <script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+    <script src="static/js/frontend/lib/juicer-min.js"></script>
+    <script src="static/js/frontend/src/config.js"></script>
+    <script src="static/js/frontend/src/functions.js"></script>
+    <script src="static/js/frontend/src/index.js"></script>
+</body>
+</html>

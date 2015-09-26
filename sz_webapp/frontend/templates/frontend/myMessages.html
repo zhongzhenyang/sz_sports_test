@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+
+    <script>
+        var pageName="";
+        var userId="{{current_user.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="trTpl">
+        {@if !noData}
+        {@each results as r}
+        <tr>
+            <td class="titleTd1">
+                {@if r.category==1}
+                <a href="user/${r.sender.id}/me" target="_blank" class="ellipsis">${r.sender.fullname}</a>
+                {@else}
+                <a href="user//teams/"  target="_blank" class="ellipsis">${r.sender.fullname}</a>
+                {@/if}
+            </td>
+            <td>${r.typeTxt}</td>
+            <td>${r.statusTxt}</td>
+            <td>
+                {@if r.status==0}
+                <a class="ctrl" data-result="1" href="${r.id}">同意</a>&nbsp;
+                <a class="ctrl" data-result="-1" href="${r.id}">拒绝</a>
+                {@/if}
+            </td>
+        </tr>
+        {@/each}
+        {@else}
+        <tr>
+            <td colspan="4">${noData}</td>
+        </tr>
+        {@/if}
+
+    </script>
+
+    <div class="section section3">
+        <h2 class="singleTitle icon7">我的消息</h2>
+        <table class="table" id="myTable">
+            <thead>
+            <tr>
+                <th>发送者</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th>处理</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/myMessages.js"></script>
+
+</body>
+</html>

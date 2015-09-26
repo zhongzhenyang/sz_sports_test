@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="venue";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <div class="section">
+        <h2 class="singleTitle icon5">场馆</h2>
+        <div class="content infoContainer col2">
+            <img class="leftCol" src="{{site.pic}}">
+            <div class=" rightCol">
+                <h3  class="title">{{site.name}}</h3>
+                <br>
+                <i class="intro tColor1">价格：{{site.price}}元/小时</i>
+                <br>
+                <p class="intro">类型：{{site.name}}</p>
+                <br>
+                <p class="intro">电话：{{site.tel}}</p>
+                <br>
+                <p class="intro">地址：{{site.loc_state}}{{site.loc_city}}{{site.loc_country}}{{site.loc_address}}</p>
+            </div>
+            {% if site.features %}
+            <h5 class="subTitle">特色</h5>
+            <p class="intro">{{site.features}}</p>
+            {% endif %}
+            <h5  class="subTitle">详细介绍</h5>
+            <p class="intro">{{site.intro}}</p>
+        </div>
+    </div>
+
+
+    {% include "frontend/footer.html" %}
+</div>
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#menu a").removeClass("active");
+        $("#menu a[data-page-name='"+pageName+"']").addClass("active");
+    });
+</script>
+</body>
+</html>

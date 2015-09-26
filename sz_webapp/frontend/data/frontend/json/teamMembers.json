@@ -1,0 +1,19 @@
+{
+    "success":"true",
+    "results":[{
+        "thumb":"data/frontend/200x200/1.jpg",
+        "name":"小刚",
+        "id":1,
+        "isLeader":true
+    },{
+        "thumb":"data/frontend/200x200/2.jpg",
+        "name":"Cite Tang",
+        "id":2,
+        "isLeader":false
+    },{
+        "thumb":"data/frontend/200x200/3.jpg",
+        "name":"xxx",
+        "id":1,
+        "isLeader":false
+    }]
+}

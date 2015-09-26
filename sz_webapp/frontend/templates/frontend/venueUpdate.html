@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="venue";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <div class="section">
+        <h2 class="singleTitle icon5">场馆</h2>
+        <div class="content">
+            {% if site.id %}
+            <form class="hForm col2" id="myForm" action="user/sites/{{site.id}}/update" method="post">
+
+                {% else %}
+                <form class="hForm col2" id="myForm" action="user/sites/create" method="post">
+                    {% endif %}
+
+                <div class="leftCol" id="thumbUploadContainer">
+                    {% if site.pic %}
+                    <img id="thumbShow" style="max-height: 280px;" class="widthAll"  src="{{site.pic}}">
+                    {% else %}
+                    <img id="thumbShow" style="max-height: 280px;"  src="static/images/frontend/default/changguan.png" class="widthAll">
+                    {% endif %}
+
+                    <input type="hidden" name="pic" id="thumb" value="{{site.pic}}">
+                    <input type="button" id="thumbUploadBtn" value="上传" class="btn centerBtn">
+                    <p class="tColor1 tip1">建议大小600x400px的jpg、png图片</p>
+                </div>
+
+                <div class="rightCol">
+                    <div class="formRow">
+                        <label class="formLabel">名称*:</label>
+                        <input class="formInput" type="text" name="name" value="{{site.name}}">
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">项目*:</label>
+                        <select class="formInput" name="athletic_item_id" id="category">
+                            <option value="">请选择</option>
+                            {% for ai in athletic_items %}
+                            {% if site.athletic_item_ids and ai.id==site.athletic_item_ids[0].id %}
+                            <option value="{{ai.id}}" selected>{{ai.name}}</option>
+                            {% else %}
+                            <option value="{{ai.id}}">{{ai.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">价格*:</label>
+                        <input  class="formInput" type="text" name="price" value="{{site.price}}">
+                        <label class="tip tColor1">元/小时</label>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">电话*:</label>
+                        <input class="formInput" type="text" name="tel" value="{{site.tel}}">
+                    </div>
+                    <div id="selectGroup">
+                        <div class="formRow">
+                            <label class="formLabel">省*:</label>
+                            <select class="formInput province" name="loc_state" data-value="{{site.loc_state}}">
+                            </select>
+                        </div>
+                        <div class="formRow">
+                            <label class="formLabel">市*:</label>
+                            <select class="formInput city" name="loc_city" data-value="{{site.loc_city}}">
+                            </select>
+                        </div>
+                        <div class="formRow">
+                            <label class="formLabel">县/区:</label>
+                            <select class="formInput area" name="loc_county" data-value="{{site.loc_country}}">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formRow" style="margin-top: 50px;">
+                    <label class="formLabel">地址*:</label>
+                    <input  class="formInput" type="text" name="loc_address" value="{{site.loc_address}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">特色*:</label>
+                    <textarea class="formInput formTxtArea" name="features">{{site.features}}</textarea>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">详细介绍*:</label>
+                    <textarea class="formInput formTxtArea" name="intro">{{site.intro}}</textarea>
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+
+
+    {% include "frontend/footer.html" %}
+</div>
+
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/qiniu.js"></script>
+<script src="static/js/frontend/lib/plupload.full.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/venueUpdate.js"></script>
+</body>
+</html>

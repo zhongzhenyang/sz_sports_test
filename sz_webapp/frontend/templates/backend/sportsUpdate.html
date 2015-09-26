@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "backend/head.html" %}
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.toastmessage.css" rel="stylesheet" type="text/css">
+
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+    <script src="static/js/backend/lib/jquery-1.11.1.min.js"></script>
+    <script src="static/js/backend/lib/bootstrap.min.js"></script>
+    <script src="static/js/backend/lib/jquery.toastmessage.js"></script>
+    <script src="static/js/backend/lib/jquery.validate.min.js"></script>
+    <script src="static/js/backend/lib/jquery.serialize-object.min.js"></script>
+    <script src="static/js/backend/lib/plupload.full.min.js"></script>
+    <script src="static/js/backend/lib/qiniu.js"></script>
+    <script src="static/js/backend/src/config.js"></script>
+    <script src="static/js/backend/src/functions.js"></script>
+    <script src="static/js/backend/src/sportsUpdate.js"></script>
+</head>
+<body>
+
+{% include "backend/header.html" %}
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">新建运动项目</h1>
+            </div>
+            <div class="panel-body" id="opt-body">
+                {% if athletic_item.id %}
+                <form class="form-horizontal" id="myForm" action="admin/athletics/{{athletic_item.id}}/update" method="post">
+
+                {% else %}
+                <form class="form-horizontal" id="myForm" action="admin/athletics/create" method="post">
+                {% endif %}
+
+                    <div class="form-group">
+                        <label for="name" class="control-label col-md-2">名称*</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" value="{{athletic_item.name}}" name="name" id="name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="drawing" class="control-label col-md-2">图片*</label>
+                        <div class="col-md-8" id="thumbUploadContainer">
+                            <span class="help-block">图片大小200x200px</span>
+                            <input type="button" value="上传文件" class="btn btn-success" id="thumbUploadBtn">
+                            <img id="thumb" src="{{athletic_item.logo}}" width="100px" height="100px">
+                            <input type="hidden" name="logo" id="drawing" value="{{athletic_item.logo}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">状态*</label>
+                        <div class="col-md-3">
+                            <select name="enabled"  class="form-control">
+                                <!--<option value="true">启用</option>
+                                <option value="false">禁用</option>-->
+                                {% for status in [{"name":"启用","value":"true"},{"name":"禁用","value":"false"}] %}
+                                {% if status.value== athletic_item.enabled %}
+                                <option selected value="{{status.value}}">{{status.name}}</option>
+                                {%  else %}
+                                <option value="{{status.value}}">{{status.name}}</option>
+                                {% endif %}
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <label class="control-label col-md-2">进球纪录*</label>
+                        <div class="col-md-3">
+                            <select name="goals_require"  id="goals_require" class="form-control">
+                                <option value="">请选择</option>
+                                <!--<option value="true">是</option>
+                                <option value="false">否</option>-->
+                                {% for status in [{"name":"是","value":"true"},{"name":"否","value":"false"}] %}
+                                {% if  athletic_item.options and  status.value== athletic_item.options.goals_require %}
+                                <option selected value="{{status.value}}">{{status.name}}</option>
+                                {%  else %}
+                                <option value="{{status.value}}">{{status.name}}</option>
+                                {% endif %}
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">分局纪录*</label>
+                        <div class="col-md-3">
+                            <select name="branch_require" id="branch_require" class="form-control">
+                                <option value="">请选择</option>
+                                <!--<option value="true">是</option>
+                                <option value="false">否</option>-->
+                                {% for status in [{"name":"是","value":"true"},{"name":"否","value":"false"}] %}
+                                {% if athletic_item.options and status.value== athletic_item.options.branch_require %}
+                                <option selected value="{{status.value}}">{{status.name}}</option>
+                                {%  else %}
+                                <option value="{{status.value}}">{{status.name}}</option>
+                                {% endif %}
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">净失球*</label>
+                        <div class="col-md-3">
+                            <select name="goal_difference_require" id="goal_difference_require" class="form-control">
+                                <option value="">请选择</option>
+                                <!--<option value="true">是</option>
+                                <option value="false">否</option>-->
+                                {% for status in [{"name":"是","value":"true"},{"name":"否","value":"false"}] %}
+                                {% if athletic_item.options and status.value== athletic_item.options.goal_difference_require %}
+                                <option selected value="{{status.value}}">{{status.name}}</option>
+                                {%  else %}
+                                <option value="{{status.value}}">{{status.name}}</option>
+                                {% endif %}
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="control-label col-md-2">描述</label>
+                        <div class="col-md-8">
+                            <textarea class="form-control"  name="intro" rows="3">{{athletic_item.intro}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8">
+                            <button type="submit" class="btn btn-success form-control">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </article>
+</section>
+
+{% include "backend/loading.html" %}
+
+</body>
+</html>

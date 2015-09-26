@@ -1,0 +1,31 @@
+{
+    "success":"true",
+    "results":[{
+        "thumb":"data/frontend/images/changguan.png",
+        "tel":"18876768798",
+        "cost":"12",
+        "address":"深圳南山大道",
+        "feature":"xxxxxxxxxxxxxxxx",
+        "description":"xxxxxxxxxxxxxxxx",
+        "name":"深圳足球馆1",
+        "category":"足球"
+    },{
+        "thumb":"data/frontend/images/changguan.png",
+        "tel":"18876768798",
+        "cost":"12",
+        "address":"深圳南山大道",
+        "feature":"xxxxxxxxxxxxxxxx",
+        "description":"xxxxxxxxxxxxxxxx",
+        "name":"深圳篮球馆2",
+        "category":"篮球"
+    },{
+        "thumb":"data/frontend/images/changguan.png",
+        "tel":"18876768798",
+        "cost":"12",
+        "address":"小案件法律都交罚款等经费",
+        "feature":"xxxxxxxxxxxxxxxx",
+        "description":"xxxxxxxxxxxxxxxx",
+        "name":"深圳足球馆3",
+        "category":"足球"
+    }]
+}

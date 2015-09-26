@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container container1">
+
+
+    {% include "frontend/header.html" %}
+
+
+    <div class="section2 col2">
+        <img class="leftCol leftCol2" src="static/images/frontend/app/sports.png">
+        <form class="hForm minForm rightCol rightCol2" id="myForm" method="post"
+              action="forgot-password">
+            <h3 class="title tColor1">忘记密码</h3>
+            <div class="formRow">
+                <label class="formLabel">邮箱*:</label>
+                <input class="formInput" type="text" name="email">
+            </div>
+            <br>
+            <input type="submit" value="忘记密码" class="btn btn1">
+            <label id="tip" class="error hidden" style="margin-top: 20px;display: block;text-align: center">
+                操作成功，请进入邮箱进行密码重置！
+            </label>
+        </form>
+    </div>
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/forgetPwd.js"></script>
+</body>
+</html>

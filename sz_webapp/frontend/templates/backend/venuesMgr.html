@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "backend/head.html" %}
+
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.toastmessage.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+    <script src="static/js/backend/lib/jquery-2.0.3.min.js"></script>
+    <script src="static/js/backend/lib/bootstrap.min.js"></script>
+    <script src="static/js/backend/lib/jquery.dataTables.min.js"></script>
+    <script src="static/js/backend/lib/jquery.toastmessage.js"></script>
+    <script src="static/js/backend/src/config.js"></script>
+    <script src="static/js/backend/src/functions.js"></script>
+    <script src="static/js/backend/src/venuesMgr.js"></script>
+</head>
+<body>
+
+{% include "backend/header.html" %}
+
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">场馆管理</h1>
+            </div>
+            <div class="panel-body" id="opt-body">
+                <div class="input-group tableSearchContainer col-md-6">
+                    <div class="col-md-7">
+                        <input type="text" id="searchContent" class="form-control" placeholder="名称">
+                    </div>
+                    <div class="col-md-4" >
+                        <select class="form-control" id="searchType">
+                            <option value="">全部</option>
+                            <option value="0">未审核</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                    </div>
+                </div>
+                <table id="myTable" class="dataTable">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>电话</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>
+                        <td><a href="#">xxx场馆</a></td>
+                        <td>xxxxxxx</td>
+                        <td>待审核</td>
+                        <td><a href="#" class="update">删除</a>&nbsp;<a href="#" class="update">通过</a></td>
+                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</section>
+
+{% include "backend/loading.html" %}
+
+</body>
+</html>

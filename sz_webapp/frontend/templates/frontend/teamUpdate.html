@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var userId="{{current_user.id}}";
+        var teamId="{{team.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+
+    {% include "frontend/header.html" %}
+
+    <div class="section col3">
+        <h2 class="singleTitle icon7">创建球队</h2>
+        <div class="content">
+            <div class="leftCol" id="thumbUploadContainer">
+                {% if team.logo %}
+                <img id="thumbShow" style="max-height: 210px;"  class="widthAll"  src="{{team.logo}}">
+                {% else %}
+                <img id="thumbShow" style="max-height: 210px;"  class="widthAll"  src="static/images/frontend/default/teamLogo.png">
+                {% endif %}
+
+
+                <input type="hidden" id="thumb" name="logo" value="{{team.logo}}">
+                <a class="btn centerBtn" id="thumbUploadBtn">上传队徽</a>
+                <p class="tColor1 tip1">建议1:1的jpg、png图片,不大于500x500px</p>
+            </div>
+
+            {% if team.id %}
+            <form class="hForm centerCol" id="myForm" action="user/teams/{{team.id}}/update" method="post">
+                <input type="hidden" name="athletic_item_id" value="{{team.athletic_item_id}}">
+                {% else %}
+                <form class="hForm centerCol" id="myForm" action="user/teams/create" method="post">
+                    <input type="hidden" name="athletic_item_id" id="sportId">
+                    {% endif %}
+
+
+
+                <div class="formRow">
+                    <label class="formLabel">名称*:</label>
+                    <input class="formInput" type="text" name="name" value="{{team.name}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">简称*:</label>
+                    <input class="formInput" name="abbr_name" type="text" value="{{team.abbr_name}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">电话*:</label>
+                    <input class="formInput" name="contact_me" type="text"  value="{{team.contact_me}}">
+                </div>
+                <div id="selectGroup">
+                    <div class="formRow">
+                        <label class="formLabel">省*:</label>
+                        <select class="formInput province" name="loc_state" data-value="{{team.loc_state}}">
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">市*:</label>
+                        <select class="formInput city" name="loc_city"  data-value="{{team.loc_city}}">
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">县:</label>
+                        <select class="formInput area" name="loc_county"  data-value="{{team.loc_country}}">
+                        </select>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">主场/地址*:</label>
+                    <input class="formInput" name="home_site" type="text"  value="{{team.home_site}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">特色:</label>
+                    <textarea class="formInput formTxtArea"  name="feature">{{team.feature}}</textarea>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">描述:</label>
+                    <textarea class="formInput formTxtArea" name="intro">{{team.intro}}</textarea>
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+            <div class="rightCol" id="clothingUploadContainer">
+                {% if team.uniform %}
+                <img id="clothingShow" style="max-height: 210px;" class="widthAll" src="{{team.uniform}}">
+                {% else %}
+                <img id="clothingShow" style="max-height: 210px;" class="widthAll" src="static/images/frontend/default/teamLogo.png">
+                {% endif %}
+
+                <input type="hidden" id="clothing" name="uniform" value="{{team.uniform}}">
+                <a class="btn centerBtn" id="clothingUploadBtn">上传队服</a>
+                <p class="tColor1 tip1">建议1:1的jpg、png图片,不大于500x500px</p>
+            </div>
+        </div>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/qiniu.js"></script>
+<script src="static/js/frontend/lib/plupload.full.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/teamUpdate.js"></script>
+</body>
+</html>

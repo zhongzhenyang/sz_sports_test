@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <div class="section">
+        <h2 class="singleTitle icon7">修改密码</h2>
+        <div class="content">
+            <form class="hForm" id="myForm" method="post" action="user/{{current_user.id}}/me/update-password">
+                <div class="formRow">
+                    <label class="formLabel">原密码*:</label>
+                    <input class="formInput" name="password" type="password">
+                </div>
+                <hr>
+                <div class="formRow">
+                    <label class="formLabel">新密码*:</label>
+                    <input class="formInput" name="new_password" type="password" id="pwd">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">确认密码*:</label>
+                    <input class="formInput" type="password" name="newConfirmPwd">
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/editPwd.js"></script>
+</body>
+</html>

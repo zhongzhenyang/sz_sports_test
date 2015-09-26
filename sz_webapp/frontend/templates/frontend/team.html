@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var teamId="{{team.id}}";
+        var currentUserId="{{current_user.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+{% include "frontend/header.html" %}
+
+<script type="text/template" id="waterfallTpl">
+    {@each results as r}
+    <li class="waterfall-item">
+        <a href="${r.details.image}" target="_blank">
+            <img src="${r.details.image}" width="${r.details.width}" height="${r.details.height}">
+        </a>
+    </li>
+    {@/each}
+</script>
+
+
+
+<div class="section">
+    <h2 class="singleTitle icon5">球队主页&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+        <span style="font-size: 18px;">{{team.name}}</span>
+
+    </h2>
+    <div class="content infoContainer content1 col2">
+
+        <img class="leftCol leftCol1" src="{{team.logo}}">
+        <div class="rightCol">
+            <div class="titleContainer">
+                {% if current_user.is_authenticated() and team.status!=-1 %}
+
+                    {% if not current_team_member %}
+                        <input class="btn fRight" id="join" value="加入">
+                    {% else %}
+
+                        {% if current_team_member.team.id==team.id and team.creator.id!=current_user.id %}
+                        <input class="btn fRight" id="unJoin" value="退出">
+                        {% endif %}
+
+                        {% if current_team_member.team.creator.id==current_user.id and team.creator.id!=current_user.id %}
+                        <a class="btn fRight"
+                           href="user/competitions/apply-challenge?p1={{current_team_member.team.id}}&p2={{team.id}}">挑战</a>
+                        {% endif %}
+
+                    {% endif %}
+
+                    {% if current_user.id==team.creator.id and team.status!=-1 %}
+                    <a class="btn fRight" href="user/teams/{{team.id}}/update">修改</a>
+                    <input class="btn fRight" id="dismiss" value="解散">
+                    {% endif %}
+
+                {% endif %}
+
+
+                {% if team.status==-1 %}
+                <h3  class="title title1">{{team.name}}（已解散）</h3>
+                {% else %}
+                <h3  class="title title1">{{team.name}}</h3>
+                {% endif %}
+
+            </div>
+            <span class="intro">
+                <label>地址:</label>
+                <span>{{team.loc_state}}{{team.loc_city}}{{team.loc_country}}{{team.home_site}}</span>
+            </span>
+            <span class="intro">
+                <label>联系电话:</label>
+                <span>{{team.contact_me}}</span>
+            </span>
+            <br>
+            <span class="intro">
+                <label>特色:</label>
+                <span>{{team.feature}}</span>
+            </span>
+            <br>
+            <span class="intro">
+                <label>描述:</label>
+                <span>{{team.intro}}</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+{% if team.competition_prizes %}
+<div class="section section1">
+    <h3  class="sTitle">荣誉榜</h3>
+    <ul class="list11">
+        <span class="seg seg1">分割线</span>
+        {% for cp in team.competition_prizes %}
+        <li>
+            <a href="user/competitions/{{cp.competition_team.competition.id}}">
+                <span class="awards">{{cp.prize}}</span>
+                <h4 class="title ellipsis">{{cp.competition_team.competition.name}}</h4>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if team.recent_fixture %}
+<div class="section section1">
+    <h3  class="sTitle">比赛</h3>
+    <ul class="list8">
+        {% for rf in team.recent_fixture %}
+        {% if loop.index<=4 %}
+        <li class="status{{rf.status}}">
+            <a href="user/{{rf.competition_id}}/competition-fixtures/{{rf.id}}">
+
+                <div class="player">
+                    <img src="{{ rf.p1_competition_team.team.creator.user_profile  if
+                    rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}">
+                        {{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}
+                          </span>
+                </div>
+                    <span class="info iconVs">
+                        {% if rf.p1_score or rf.p1_score==0 %}
+                        <span class="score">{{rf.p1_score}}:{{rf.p2_score}}</span>
+                        {% endif %}
+                    </span>
+                <div class="player">
+                    <img src="{{ rf.p2_competition_team.team.creator.user_profile  if
+                    rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}">
+                        {{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}
+                          </span>
+                </div>
+
+             </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/teams/{{team.id}}/fixtures?type=team" class="btn rightBtn">更多比赛</a>
+</div>
+{% endif %}
+
+{% if team.recent_competitions %}
+<div class="section section1">
+    <h3  class="sTitle">赛事统计</h3>
+    <ul class="list10">
+        {% for rc in team.recent_competitions %}
+        {% if loop.index<=4 %}
+        <li class="status{{rc.competition.status}}">
+            {% if rc.competition.status>=1 %}
+            <a href="user/competitions/{{rc.competition.id}}">
+                {% else %}
+                <a href="user/competitions/{{rc.competition.id}}/register">
+                    {% endif %}
+                    <img class="thumb" src="{{rc.competition.logo}}">
+                    <h3 class="title ellipsis">{{rc.competition.name}}</h3>
+
+                    <p class="intro">
+                        <label class="introC">名次</label>
+                        {% if rc.prize %}
+                        <span class="introC">{{rc.prize}}</span>
+                        {% endif %}
+                    </p>
+                    <p class="intro">
+                        <label class="introC">胜/负/平</label>
+                        {% if rc.latest_rank and rc.competition.status>=1 %}
+                     <span class="introC">{{rc.latest_rank.addition.won}}/
+                        {{rc.latest_rank.addition.lost}}/
+                        {{rc.latest_rank.addition.drawn}}
+                    </span>
+                        {% endif %}
+                    </p>
+                    <p class="intro">
+                        <label class="introC">净失球</label>
+                        {% if rc.latest_rank and rc.competition.status>=1 %}
+                    <span class="introC">{{rc.latest_rank.addition.goals_for}}/
+                        {{rc.latest_rank.addition.goals_against}}
+                    </span>
+                        {% endif %}
+                    </p>
+
+                    <p class="intro">
+                        <label class="introC">积分</label>
+                        {% if rc.latest_rank and rc.c_type==2%}
+                        <span class="introC">{{rc.latest_rank.pts}}</span>
+                        {% endif %}
+                    </p>
+
+                </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/teams/{{team.id}}/competitions?type=team" class="btn rightBtn">更多赛事</a>
+</div>
+{% endif %}
+
+<div class="section section1">
+    <h3  class="sTitle">球员</h3>
+    <ul class="list12" id="teamMembers">
+        {% for am in team.active_members  %}
+        <li>
+            <a href="user/{{am.athlete.account.id}}/me">
+                <img src="{{am.athlete.account.user_profile}}">
+                <p class="name ellipsis tColor1">{{am.athlete.account.fullname}}</p>
+                {% if am.athlete.account.id==team.creator.id %}
+                <span class="teamLeader icon9">队长</span>
+                {% endif %}
+
+                {% if current_user.is_authenticated() and team.status!=-1 and
+                current_user.id==team.creator.id and am.athlete.account.id!=current_user.id  %}
+                <div class="ctrls">
+                    <span data-member-id="{{am.athlete.account.id}}" class="btn kickOut">踢出</span>
+                    <span data-member-id="{{am.athlete.account.id}}"  class="btn promote">提升</span>
+                </div>
+                {% endif %}
+
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="section section1">
+    <h3  class="sTitle">精彩记忆</h3>
+    <ul id="waterfallContainer">
+
+    </ul>
+</div>
+
+{% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/team.js"></script>
+</body>
+</html>

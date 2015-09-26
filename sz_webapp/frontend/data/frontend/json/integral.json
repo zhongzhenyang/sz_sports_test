@@ -1,0 +1,20 @@
+{
+    "success":true,
+    "results":[{
+        "name":"Cite Tang",
+        "order":1,
+        "id":1,
+        "win":4,
+        "lose":5,
+        "flat":10,
+        "integral":20
+    },{
+        "name":"xxxxxx",
+        "id":2,
+        "order":2,
+        "win":4,
+        "lose":1,
+        "flat":10,
+        "integral":11
+    }]
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="sportsTpl">
+        {@each results as r }
+        <option value="${r.id}">${r.name}</option>
+        {@/each}
+    </script>
+
+    <script type="text/template" id="resultTpl">
+        {@if !noData}
+            {@each results as r}
+            <li>
+                {@if r.status==0}
+                <a href="user/competitions/${r.id}/register">
+                {@else}
+                    <a href="user/competitions/${r.id}">
+                {@/if}
+                    <img class="thumb" src="${r.logo}">
+                    <div class="info">
+                        <div class="titleContainer">
+                            {@if r.status==0}
+                            <span class="status tColor2">报名截止：${r.date_reg_end}</span>
+                            {@else if r.status==1}
+                            <span class="status tColor1">进行中...</span>
+                            {@else}
+                            <span class="status tColor1">已结束</span>
+                            {@/if}
+
+                            <h3 class="title ellipsis">${r.name}</h3>
+                        </div>
+                            <span class="intro">
+                                <label>项目:</label>
+                                <span>${r.athletic_item.name}</span>
+                            </span>
+                            <span class="intro">
+                                <label>类型:</label>
+                                <span>${r.typeTxt}</span>
+                            </span>
+                            <span class="intro">
+                                <label>城市:</label>
+                                <span>${r.loc_state}/${r.loc_city}/${r.loc_country}</span>
+                            </span>
+                            <span class="intro">
+                                <label>开赛时间:</label>
+                                <span>${r.date_started}</span>
+                            </span>
+                            <span class="intro">
+                                <label>已报名:</label>
+                                <span>${r.registered_teams}</span>
+                            </span>
+                        <br>
+                            <span class="intro">
+                                <label class="introTxtLabel">主办:</label>
+                                <span class="introTxt ellipsis">${r.host}</span>
+                            </span>
+                            <span class="intro">
+                                <label class="introTxtLabel">承办:</label>
+                                <span class="introTxt ellipsis">${r.organizer}</span>
+                            </span>
+                            <span class="intro">
+                                <label class="introTxtLabel">赞助:</label>
+                                <span class="introTxt ellipsis">${r.sponsor}</span>
+                            </span>
+                    </div>
+                </a>
+            </li>
+            {@/each}
+        {@else}
+        <li class="tColor1 noData">${noData}</li>
+        {@/if}
+    </script>
+
+    <div class="section">
+        <h2 class="singleTitle icon7">赛事&活动</h2>
+        <div class="searchContainer">
+            <div class="columns">
+                <label>名称</label>
+                <input class="searchInputBox searchInputBox1" type="text" id="searchName">
+            </div>
+            <div class="columns">
+                <label>项目</label>
+                <select class="searchInputBox" id="searchCategory">
+                    <option value="">所有</option>
+                </select>
+            </div>
+            <div class="columns">
+                <label>类别</label>
+                <select class="searchInputBox" id="searchType">
+                    <option value="">所有</option>
+                    <option value="2">联赛</option>
+                    <option value="1">活动</option>
+                </select>
+            </div>
+            <div class="columns">
+                <label>状态</label>
+                <select class="searchInputBox" id="searchStatus">
+                    <option value="">所有</option>
+                    <option value="0">报名</option>
+                    <option value="1">进行中</option>
+                    <option value="2">已结束</option>
+                </select>
+            </div>
+            <div class="columns" id="selectGroup">
+                <label>城市</label>
+                <select class="searchInputBox province" id="province">
+                </select>
+                <select class="searchInputBox city" id="city">
+                </select>
+                <select class="searchInputBox area" id="area">
+                </select>
+            </div>
+            <div class="columns">
+                <button class="btn" id="searchBtn">搜 索</button>
+            </div>
+            {% if current_user.is_authenticated() %}
+            <div class="columns">
+                <a href="user/competitions/create-activity" class="btn">新建</a>
+            </div>
+            {% endif %}
+            <br>
+            <div class="columns">
+                <label>排序</label>
+                &nbsp;|&nbsp;
+                <label style="cursor: pointer" class="tColor1 sort desc" id="sortDate">时间</label>
+            </div>
+        </div>
+        <ul class="list3" id="myList">
+
+
+        </ul>
+        <!--<a class="more" href="#">分页</a>-->
+    </div>
+
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitions.js"></script>
+</body>
+</html>

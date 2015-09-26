@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var userId="{{account.id if account else 0}}";
+        var teamId="{{team.id if team else 0}}";
+        var athleteId="{{athlete.account.id if athlete else 0}}";
+        var athleticId="{{athlete.athletic_item_id if athlete else 0}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="resultTpl">
+        {@each results as r}
+        <li class="status${r.status}">
+            {@if r.status==0}
+            <a href="user/competitions/${r.competition.id}/register">
+            {@else}
+                <a href="user/competitions/${r.competition.id}">
+            {@/if}
+
+                <img class="thumb" src="${r.competition.logo}">
+                <h3 class="title ellipsis">${r.competition.name}</h3>
+                <p class="intro">
+                    <label class="introC">名次</label>
+                    {@if r.prize}
+                    <span class="introC">${r.prize}</span>
+                    {@/if}
+                </p>
+                <p class="intro">
+                    <label class="introC">胜/负/平</label>
+                    {@if r.latest_rank_addition }
+                    <span class="introC">${r.latest_rank_addition.won}
+                        /${r.latest_rank_addition.lost}/
+                        ${r.latest_rank_addition.drawn}</span>
+                    {@/if}
+                </p>
+                <p class="intro">
+                    <label class="introC">净失球</label>
+                    {@if r.latest_rank_addition }
+                    <span class="introC">${r.latest_rank_addition.goals_for}/${r.latest_rank_addition.goals_against}</span>
+                    {@/if}
+                </p>
+                <p class="intro">
+                    <label class="introC">积分</label>
+                    {@if r.competition.c_type==2 }
+                    <span class="introC">${r.latest_rank.pts}</span>
+                    {@/if}
+                </p>
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+    <div class="section">
+        <h2 class="singleTitle icon5">
+            更多赛事
+        </h2>
+    </div>
+
+    <div class="section section1">
+        <ul class="list10" id="myList">
+
+        </ul>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/moreCompetition.js"></script>
+</body>
+</html>

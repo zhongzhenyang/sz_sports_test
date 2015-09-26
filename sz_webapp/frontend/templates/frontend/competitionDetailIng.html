@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+        var competitionId="{{competition.id}}";
+        var competitionType="{{competition.c_type}}";
+        var stage="{{competition.stage}}";
+        var goalDifference="{{competition.athletic_item.options.goal_difference_require}}";
+        var playerIsPerson="{{competition.options.individual}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="waterfallTpl">
+        {@each results as r}
+        <li class="waterfall-item">
+            <a href="${r.details.image}" target="_blank">
+                <img src="${r.details.image}" width="${r.details.width}" height="${r.details.height}">
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+    <script type="text/template" id="resultTpl">
+        <img class="player" src="${p1.logo}">
+            <span class="info iconVs">
+                {@if p1_score || p1_score==0}
+                <span class="score">${p1_score}:${p2_score}</span>
+                {@/if}
+            </span>
+        <img  class="player" src="${p2.logo}">
+    </script>
+    <script type="text/template" id="result1Tpl">
+        <li>
+            <a href="user/${competition_id}/competition-fixtures/${id}">
+                <div class="player">
+                    <img src="${p1.logo}">
+                    <span class="name" title="${p1.name}">${p1.name}</span>
+                </div>
+
+                <span class="info iconVs">
+                    {@if p1_score || p1_score==0}
+                    <span class="score">${p1_score}:${p2_score}</span>
+                    {@/if}
+                </span>
+                <div class="player">
+                    <img src="${p2.logo}">
+                    <span class="name" title="${p2.name}">${p2.name}</span>
+                </div>
+            </a>
+        </li>
+    </script>
+
+    <script type="text/template" id="result2Tpl">
+        {@each results as r}
+        <li class="status${r.status}">
+            <a href="user/${r.competition_id}/competition-fixtures/${r.id}">
+                <div class="player">
+                    <img src="${r.p1.logo}">
+                    <span class="name" title="${r.p1.name}">${r.p1.name}</span>
+                </div>
+
+            <span class="info iconVs">
+                {@if r.p1_score || r.p1_score==0}
+                <span class="score">${r.p1_score}:${r.p2_score}</span>
+                {@/if}
+            </span>
+                <div class="player">
+                    <img src="${r.p2.logo}">
+                    <span class="name" title="${r.p2.name}">${r.p2.name}</span>
+                </div>
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+    <script type="text/template" id="integralTpl">
+        {@each c_teams as r,index}
+        <tr>
+            <td>${r.num}</td>
+            <td>
+                {@if playerIsPerson=="true"}
+                <a href="user/${r.team.id}/me">${r.team.name}</a>
+                {@else}
+                <a href="user/teams/${r.team.id}">${r.team.name}</a>
+                {@/if}
+            </td>
+            {@if r.rank_addition }
+                <td>${r.rank_addition.won}/${r.rank_addition.lost}/${r.rank_addition.drawn}</td>
+                <td>${r.rank_addition.played}</td>
+                {@if goalDifference=="true"}
+                <td>${r.rank_addition.goals_for}/${r.rank_addition.goals_against}</td>
+                {@/if}
+            {@else}
+                <td>0/0/0</td>
+                <td>0</td>
+                {@if goalDifference=="true"}
+                <td>0/0</td>
+                {@/if}
+            {@/if}
+
+            <td>${r.current_rank.pts}</td>
+        </tr>
+        {@/each}
+    </script>
+
+
+    <div class="section">
+        <h2 class="singleTitle icon5">赛事公告&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">赛事详情</span></h2>
+        <div class="content infoContainer col2">
+            <img class="leftCol leftCol1" src="{{competition.logo}}">
+            <div class="rightCol rightCol1">
+                <div class="titleContainer">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    {% if competition.c_type==1 or (competition.c_type==2 and competition.stage==3) %}
+                    <input class="btn fRight" id="end" style="margin-left: 10px;" value="结束">
+                    {%  endif %}
+                    {% if competition.c_type==2 %}
+                    <input class="btn fRight" id="setStage" value="设置阶段">
+                    {% endif %}
+                    {% endif %}
+                    <h3  class="title title1">{{competition.name}}</h3>
+                </div>
+                <span class="intro">
+                    <label>项目:</label>
+                    <span>{{competition.athletic_item.name}}</span>
+                </span>
+                <span class="intro">
+                    <label>城市:</label>
+                    <span>{{competition.loc_state}}{{competition.loc_city}}{{competition.loc_country}}</span>
+                </span>
+                <span class="intro">
+                    <label>开赛时间:</label>
+                    <span>{{competition.date_started}}</span>
+                </span>
+                <!--<span class="intro">
+                    <label>报名截止:</label>
+                    <span>2015-09-09</span>
+                </span>-->
+                <span class="intro">
+                    <label class="introTxtLabel">主办:</label>
+                    <span class="introTxt ellipsis" title="{{competition.host}}">{{competition.host}}</span>
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">承办:</label>
+                    <span class="introTxt ellipsis" title="{{competition.organizer}}">{{competition.organizer}}</span>
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">赞助:</label>
+                    <span class="introTxt ellipsis" title="{{competition.sponsor}}">{{competition.sponsor}}</span>
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">联系方式:</label>
+                    <span class="introTxt">{{competition.contact_me}}</span>
+                </span>
+                {% if competition.c_type==2 %}
+                <span class="intro">
+                    <label class="introTxtLabel">当前阶段:</label>
+                    <span class="introTxt" id="stageTxt">{{competition.stage}}</span>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if competition.c_type==2 and competition.stage==3 %}
+    <div class="section" style="margin-top: 80px;">
+        <div class="obsoletePanel">
+            <div class="leftTop">
+                <a class="item" id="8-A-1" href="user/{{competition.id}}/competition-fixtures/create?position=8-A-1" style="left:0px;top:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line11 lineBorder">连线</div>
+                <a class="item" id="8-A-2" href="user/{{competition.id}}/competition-fixtures/create?position=8-A-2" style="top:80px;left:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line12 lineBorder1">连线</div>
+                <a class="item" id="4-A-1" style="left:150px;top:40px;">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="leftBottom">
+                <a class="item"  id="8-A-3" href="user/{{competition.id}}/competition-fixtures/create?position=8-A-3" style="left:0px;top:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line11 lineBorder">连线</div>
+                <a class="item"  id="8-A-4" href="user/{{competition.id}}/competition-fixtures/create?position=8-A-4" style="top:80px;left:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line12 lineBorder1">连线</div>
+                <a class="item"  id="4-A-2" style="left:150px;top:40px;">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="line line2 line21 lineBorder">连线</div>
+            <div class="line line2 line22 lineBorder1">连线</div>
+            <div class="left">
+                <a class="item"  id="2-A-1">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="line line3">连线</div>
+            <div class="center">
+                <a class="item item1" id="1--1" >
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+                <a class="item item1" id="1--2" style="top:120px;">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="line line4">连线</div>
+            <div class="right">
+                <a class="item"  id="2-B-1">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="line line2 line23 lineBorder2">连线</div>
+            <div class="line line2 line24 lineBorder3">连线</div>
+            <div class="rightTop">
+                <a class="item" href="user/{{competition.id}}/competition-fixtures/create?position=8-B-1" id="8-B-1" style="right:0px;top:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line13 lineBorder2">连线</div>
+                <a class="item" href="user/{{competition.id}}/competition-fixtures/create?position=8-B-2" id="8-B-2" style="top:80px;right:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line14 lineBorder3">连线</div>
+                <a class="item"  id="4-B-1" style="right:150px;top:40px;">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+            <div class="rightBottom">
+                <a class="item" href="user/{{competition.id}}/competition-fixtures/create?position=8-B-3" id="8-B-3" style="right:0px;top:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line13 lineBorder2">连线</div>
+                <a class="item" href="user/{{competition.id}}/competition-fixtures/create?position=8-B-4" id="8-B-4" style="top:80px;right:0px;">
+                    {% if current_user.is_authenticated() and competition.manager.id==current_user.id %}
+                    <span class="add">+</span>
+                    {% endif %}
+                </a>
+                <div class="line line1 line14 lineBorder3">连线</div>
+                <a class="item"  id="4-B-2" style="right:150px;top:40px;">
+                    <!--<img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">-->
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if competition.c_type==2 %}
+    <div class="section section1">
+        <h3  class="sTitle">积分榜</h3>
+        <table class="table" id="integral" style="width:100%">
+            <thead>
+            <tr>
+                <th>排名</th>
+                <th>球队/选手</th>
+                <th>胜/负/平</th>
+                <th>场次</th>
+                {% if competition.athletic_item.options.goal_difference_require=="true" %}
+                <th>净失球</th>
+                {% endif %}
+                <th>积分</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if competition.c_type==2 and competition.stage>=2 %}
+    <div class="section section1">
+        <h3  class="sTitle">小组赛</h3>
+
+        <ul class="list7">
+            <li>
+                <h3 class="title">A组</h3>
+                <ul class="list7s1" id="listA">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=A" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li>
+                <h3  class="title">B组</h3>
+                <ul  class="list7s1" id="listB">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=B" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li>
+                <h3  class="title">C组</h3>
+                <ul  class="list7s1" id="listC">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=C" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li style="border: none">
+                <h3  class="title">D组</h3>
+                <ul  class="list7s1" id="listD">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=D" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+
+
+            <li>
+                <h3 class="title">E组</h3>
+                <ul class="list7s1" id="listE">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=E" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li>
+                <h3  class="title">F组</h3>
+                <ul  class="list7s1" id="listF">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=F" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li>
+                <h3  class="title">G组</h3>
+                <ul  class="list7s1" id="listG">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=G" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+            <li>
+                <h3  class="title">H组</h3>
+                <ul  class="list7s1" id="listH">
+
+                </ul>
+                {% if competition.stage==2 and current_user.is_authenticated() and
+                competition.manager.id==current_user.id %}
+                <a href="user/{{competition.id}}/competition-fixtures/create?group=H" class="btn centerBtn">添加比赛</a>
+                {% endif %}
+            </li>
+        </ul>
+
+    </div>
+    {% endif %}
+
+    <div class="section section1">
+        <h3  class="sTitle">预选赛/比赛</h3>
+        {% if competition.stage==1 and competition.status!=2 and
+        current_user.is_authenticated() and competition.manager.id==current_user.id %}
+        <a href="user/{{competition.id}}/competition-fixtures/create" class="btn btn2">添加比赛</a>
+        {% endif %}
+        <ul class="list8" id="result2">
+            <!--<li>
+                <a href="#">
+                    <img class="player" src="data/frontend/200x200/1.jpg">
+                    <span class="info iconVs">
+                        <span class="score">4:1</span>
+                    </span>
+                    <img  class="player" src="data/frontend/200x200/2.jpg">
+                </a>
+            </li>-->
+
+        </ul>
+    </div>
+    <div class="section section1">
+        <h3  class="sTitle">精彩记忆</h3>
+        <!--<button class="btn btn2">添加</button>-->
+        <ul class="list6" id="waterfallContainer">
+            <!--<li>
+                <a href="data/frontend/200x200/1.jpg" target="_blank">
+                    <img src="data/frontend/200x200/1.jpg">
+                </a>
+            </li>-->
+
+        </ul>
+        <!--<a href="#" class="btn rightBtn">更多精彩</a>-->
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+<div class="popWindow hidden" id="popWindow">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight" id="closePopWindow">X</span>
+        <div class="content">
+            <form id="myForm" class="vForm">
+                <div class="formRow">
+                    <label class="formLabel">阶段*:</label>
+                    <select class="formInput" id="stage">
+                        <option value="1">预选赛</option>
+                        <option value="2">小组赛</option>
+                        <option value="3">淘汰赛</option>
+                    </select>
+                </div>
+                <input type="button" value="确定" id="setStageSubmit" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+
+<span class="returnTop" id="returnTop">返回顶部</span>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitionDetailIng.js"></script>
+</body>
+</html>

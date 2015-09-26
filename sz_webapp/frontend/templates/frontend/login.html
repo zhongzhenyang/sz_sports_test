@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container container1">
+
+    {% include "frontend/header.html" %}
+
+
+    <div class="section2 col2" >
+        <img class="leftCol leftCol2" src="static/images/frontend/app/sports.png">
+        <form class="hForm minForm rightCol rightCol2" id="myForm" method="post" action="login">
+            <h3 class="title tColor1">登录</h3>
+            <div class="formRow">
+                <label class="formLabel">邮箱*:</label>
+                <input class="formInput" type="text" name="email">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">密码*:</label>
+                <input class="formInput" type="password" name="password">
+            </div>
+            <br>
+            <div class="formRow">
+                <a href="register" class="tColor1" style="font-size: 14px;float:right">注册新账号</a>
+                <a href="forgot-password" class="tColor1" style="font-size: 14px;margin-left: 19%">忘记密码</a>
+            </div>
+            <input type="submit" value="登录" class="btn btn1">
+            {% if data.info %}
+            <label class="error" style="margin-top: 20px;display: block;text-align: center">{{ data.info }}</label>
+            {% endif %}
+        </form>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+    "sEcho":1,
+    "success":true,
+    "iTotalRecords":20,
+    "iTotalDisplayRecords":20,
+    "aaData": [{
+        "id":1,
+        "name": "xxxx",
+        "sports":"足球"
+    },{
+        "id":1,
+        "name": "xxxx",
+        "sports":"篮球"
+    }]
+}

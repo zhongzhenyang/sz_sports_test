@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var userId="{{account.id if account else 0}}";
+        var teamId="{{team.id if team else 0}}";
+        var athleteId="{{athlete.account.id if athlete else 0}}";
+        var athleticId="{{athlete.athletic_item_id if athlete else 0}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="resultTpl">
+        {@each results as r}
+        <li class="status${r.status}">
+            <a href="user/${r.competition_id}/competition-fixtures/${r.id}">
+                <div class="player">
+                    <img src="${r.p1_team.logo}">
+                    <span class="name" title="${r.p1_team.name}">${r.p1_team.name}</span>
+                </div>
+                    <span class="info iconVs">
+                        {@if r.p1_score || r.p1_score==0}
+                        <span class="score">${r.p1_score}:${r.p2_score}</span>
+                        {@/if}
+                    </span>
+                <div class="player">
+                    <img src="${r.p2_team.logo}">
+                    <span class="name" title="${r.p2_team.name}">${r.p2_team.name}</span>
+                </div>
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+<div class="section">
+    <h2 class="singleTitle icon5">
+        更多比赛
+    </h2>
+
+</div>
+
+<div class="section section1">
+    <ul class="list8" id="myList">
+
+
+    </ul>
+</div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/moreCompetitionResult.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+        var competitionId="{{competition.id}}";
+        var canPersonJoin="{{competition.options.individual}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="memberTpl">
+        {@each results as r}
+        <li>
+            {@if canPersonJoin}
+                <a href="user/${r.team_id}/me">
+            {@else}
+                <a href="user/teams/${r.team_id}">
+            {@/if}
+                <img src="${r.team.logo}">
+                <div class="infoBg"></div>
+                <div class="info">
+                    <h3 class="title ellipsis">${r.team.name}</h3>
+                </div>
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+    <div class="section">
+        <h2 class="singleTitle icon5">赛事公告&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">赛事详情</span></h2>
+        <div class="content infoContainer col2">
+            <img class="leftCol leftCol1" src="{{competition.logo}}">
+            <div class="rightCol rightCol1">
+                <div class="titleContainer">
+                    {% if current_user.is_authenticated() %}
+                    <input class="btn fRight hidden" id="join" value="报名">
+                    <input class="btn fRight hidden" id="unJoin" value="取消报名">
+                    {% if current_user.id==competition.manager.id %}
+                        {% if competition.c_type!=2 %}
+                    <input class="btn fRight" id="promote" value="申请联赛">
+                        {% endif %}
+                    <a class="btn fRight" href="user/competitions/{{competition.id}}/edit-activity">修改</a>
+                    {% endif %}
+                    {% endif %}
+                    <h3  class="title title1">{{competition.name}}</h3>
+                </div>
+                <span class="intro">
+                    <label>项目:</label>
+                    <span>{{competition.athletic_item.name}}</span>
+                </span>
+                <span class="intro">
+                    <label>城市:</label>
+                    <span>{{competition.loc_state}}{{competition.loc_city}}{{competition.loc_country}}</span>
+                </span>
+                <span class="intro">
+                    <label>开赛时间:</label>
+                    <span>{{competition.date_started}}</span>
+                </span>
+                <span class="intro">
+                    <label>报名截止:</label>
+                    <span>{{competition.date_reg_end}}</span>
+                </span>
+                <span class="intro">
+                    <label>报名:</label>
+                    {% if competition.options.individual=="true" %}
+                    <span>个人报名</span>
+                    {% else %}
+                    <span>球队报名</span>
+                    {% endif %}
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">主办:</label>
+                    <span class="introTxt ellipsis" title="{{competition.host}}">{{competition.host}}</span>
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">承办:</label>
+                    <span class="introTxt ellipsis" title="{{competition.organizer}}">{{competition.organizer}}</span>
+                </span>
+                <span class="intro">
+                    <label class="introTxtLabel">赞助:</label>
+                    <span class="introTxt ellipsis" title="{{competition.sponsor}}">{{competition.sponsor}}</span>
+                </span>
+            </div>
+            <h5 class="subTitle" style="margin-top: 30px">联系方式</h5>
+            <p class="intro">{{competition.contact_me}}</p>
+            <h5 class="subTitle" >详细介绍</h5>
+            <p class="intro">{{competition.intro}}</p>
+            <h5  class="subTitle">参赛要求</h5>
+            <p class="intro">{{competition.requirement}}</p>
+            <h5  class="subTitle">已报名</h5>
+            <ul class="list4 list5" id="members">
+                {% for rt in registered_teams %}
+                <li>
+                    {% if competition.options.individual=="true" %}
+                    <a href="user/{{rt.team.id}}/me">
+                        {% else %}
+                        <a href="user/{{rt.team.id}}/team">
+                            {% endif %}
+                            <img src="{{ rt.team.logo if rt.team.type==0 else rt.team.creator.user_profile }}">
+                            <div class="infoBg"></div>
+                            <div class="info">
+                                <h3 class="title ellipsis">{{ rt.team.name if rt.team.type==0 else rt.team.creator.fullname }}</h3>
+                            </div>
+                        </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitionDetail.js"></script>
+</body>
+</html>

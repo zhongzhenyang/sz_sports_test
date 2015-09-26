@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "backend/head.html" %}
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+{% include "backend/header.html" %}
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">欢迎</h1>
+            </div>
+            <div class="panel-body">
+                <h1 class="text-success text-center">欢迎使用管理系统</h1>
+            </div>
+        </div>
+    </article>
+</section>
+</body>
+</html>

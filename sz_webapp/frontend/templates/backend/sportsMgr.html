@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "backend/head.html" %}
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.toastmessage.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+    <script src="static/js/backend/lib/jquery-2.0.3.min.js"></script>
+    <script src="static/js/backend/lib/bootstrap.min.js"></script>
+    <script src="static/js/backend/lib/jquery.dataTables.min.js"></script>
+    <script src="static/js/backend/lib/jquery.toastmessage.js"></script>
+    <script src="static/js/backend/src/config.js"></script>
+    <script src="static/js/backend/src/functions.js"></script>
+    <!--<script src="static/js/backend/src/sportsMgr.js"></script>-->
+</head>
+<body>
+{% include "backend/header.html" %}
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">运动项目管理</h1>
+            </div>
+            <div class="panel-body" id="opt-body">
+                <a class="btn btn-success" href="admin/athletics/create">
+                    <span class="glyphicon glyphicon-plus"></span> 新建
+                </a>
+                <table id="myTable" class="dataTable">
+                    <thead>
+                    <tr>
+                        <th>图片</th>
+                        <th>名称</th>
+                        <th>描述</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for a in athletic_items %}
+                    <tr>
+                         <td><img class='thumb' src="{{a.logo}}"></td>
+                         <td>{{a.name}}</td>
+                         <td>{{a.intro}}</td>
+                         {% if a.enabled %}
+                        <td>启用</td>
+                        {% else %}
+                        <td>禁用</td>
+                         {% endif %}
+
+                         <td><a href="admin/athletics/update/{{a.id}}" class="update">修改</a>&nbsp;</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</section>
+
+{% include "backend/loading.html" %}
+
+
+</body>
+</html>

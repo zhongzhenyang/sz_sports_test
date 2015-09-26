@@ -1,0 +1,42 @@
+<div class="header">
+    <h1 class="logo"><a href="">石竹运动</a></h1>
+    <ul class="menu" id="menu">
+        <li><a data-page-name="index" href="http://www.shizs.com">首页</a></li>
+        <li><a data-page-name="competition" href="user/competitions/">赛事公告</a></li>
+        <li><a data-page-name="venue" href="user/sites">场地</a></li>
+        <li><a data-page-name="about" href="http://www.shizs.com/archives/4">关于石竹</a></li>
+        </ul>
+    {% if not current_user.is_authenticated() %}
+    <ul class="menu1">
+        <li><a href="login">登录</a></li>
+        <li><a href="register">注册</a></li>
+    </ul>
+    {% else %}
+    <div class="userInfo">
+        <div class="info">
+            {% if current_user.user_profile %}
+            <img class="profile" src="{{current_user.user_profile}}">
+            {% else %}
+            <img class="profile" src="static/images/frontend/default/profile.png">
+            {% endif %}
+            <span class="name ellipsis">{{current_user.fullname}}</span>
+            <span class="count">{{pending_message_count()}}</span>
+            <span class="arrow">下三角形</span>
+        </div>
+        <ul class="menu2">
+            {% if current_user.role=="admin" %}
+            <li><a href="admin/home/">后台管理</a></li>
+            {% else %}
+            <li><a href="user/{{current_user.id}}/me/">个人主页</a></li>
+            <li><a href="user/{{current_user.id}}/me/edit-info">修改资料</a></li>
+            <li><a href="user/{{current_user.id}}/me/update-password">修改密码</a></li>
+            <li><a href="user/{{current_user.id}}/me/competitions">我的赛事</a></li>
+            <li><a href="user/{{current_user.id}}/me/sites">我的场地</a></li>
+            <li><a href="user/{{current_user.id}}/me/messages">消息({{pending_message_count()}})</a></li>
+            {% endif %}
+            <li><a href="search/">找人&amp;球队</a></li>
+            <li><a href="logout">退出</a></li>
+        </ul>
+    </div>
+    {% endif %}
+</div>

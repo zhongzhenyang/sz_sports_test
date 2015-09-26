@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/lib/date_input.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+        var competitionId="{{competition.id}}";
+        var stage="{{competition.stage}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="playerTpl">
+        {@each results as r}
+        <option value="${r.team_id}" data-logo="${r.team.logo}">${r.team.name}</option>
+        {@/each}
+    </script>
+
+    <div class="section">
+        <h2 class="singleTitle icon5">赛事/活动&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">添加比赛</span></h2>
+        <div class="content infoContainer">
+            <span class="intro tColor1" style="font-size: 36px;">
+                <label>联赛/活动名称：{{competition.name}}</label>
+                <span>{{competition.athletic_item.name}}</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="section" style="width:70%;margin:30px auto 0 auto">
+        <form class="hForm" id="myForm" action="user/{{competition.id}}/competition-fixtures/create" method="post">
+            <input type="hidden" name="group" value="" id="group">
+            <input type="hidden" name="addition" value="" id="position">
+            <div class="vsInfo">
+                <div class="player">
+                    <img class="thumb widthAll" src="static/images/frontend/default/teamLogo.png">
+                    <p class="name tColor1"></p>
+                    <select  class="inputBox selectPlayer" id="player1" name="p1">
+                        <option value="">请选择</option>
+
+                    </select>
+                </div>
+                <div class="vs">
+                    <img src="static/images/frontend/app/vs.png">
+                </div>
+                <div class="player">
+                    <img class="thumb  widthAll" src="static/images/frontend/default/teamLogo.png">
+                    <p class="name tColor1"></p>
+                    <select  class="inputBox selectPlayer" id="player2" name="p2">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="formRow" style="margin-top: 30px;">
+                <label class="formLabel">场馆*:</label>
+                <input class="formInput" type="text" name="site">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">比赛时间*:</label>
+                <input class="formInput" type="text" id="date" name="date_started">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">轮次:</label>
+                <input  class="formInput" type="text" name="round">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">场次:</label>
+                <input  class="formInput" type="text" name="sn">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">公证人:</label>
+                <input  class="formInput" type="text" name="notary_name" id="search1">
+                <input type="hidden" name="notary_id" id="notary">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">裁判:</label>
+                <input  class="formInput" type="text" name="referee_name" id="search2">
+                <input type="hidden" name="referee_id" id="referee">
+            </div>
+            <input type="submit" value="提交" class="btn centerBtn">
+        </form>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.marcopolo.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.date_input.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/lang/frontend/jquery.date_input.zh_CN.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitionResultUpdate.js"></script>
+</body>
+</html>

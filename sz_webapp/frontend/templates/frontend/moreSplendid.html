@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>石竹运动</title>
+    <base href="http://localhost/pink/">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <script type="text/template" id="waterfallTpl">
+        {@each result as r}
+        <li class="waterfall-item">
+            <a href="${r.image}" target="_blank">
+                <img src="${r.image}" width="${r.width}" height="${r.height}">
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+
+<script src="templates/frontend/header.js"></script>
+
+<div class="section">
+    <h2 class="singleTitle icon5">
+        更多精彩&nbsp;&nbsp;&gt;&nbsp;&nbsp;
+        <span style="font-size: 18px;">Cite Tang</span>
+        &gt;
+        <span style="font-size: 18px;">足球</span>
+    </h2>
+
+</div>
+
+<div class="section section1">
+    <ul id="waterfallContainer">
+
+    </ul>
+</div>
+
+    <script src="templates/frontend/footer.js"></script>
+</div>
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/moreSplendid.js"></script>
+</body>
+</html>

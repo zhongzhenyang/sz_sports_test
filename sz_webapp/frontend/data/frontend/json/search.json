@@ -1,0 +1,21 @@
+{
+    "success":true,
+    "type":1,
+    "results":[{
+        "thumb":"data/frontend/200x200/1.jpg",
+        "name":"Cite Tang",
+        "id":1
+    },{
+        "thumb":"data/frontend/200x200/2.jpg",
+        "name":"小刚",
+        "id":1
+    },{
+        "thumb":"data/frontend/200x200/3.jpg",
+        "name":"小wu",
+        "id":1
+    },{
+        "thumb":"data/frontend/200x200/1.jpg",
+        "name":"小liu",
+        "id":1
+    }]
+}

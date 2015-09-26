@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container container1">
+
+    {% include "frontend/header.html" %}
+
+
+    <div class="section2 col2">
+        <img class="leftCol leftCol2" src="static/images/frontend/app/sports.png">
+        <form class="hForm minForm rightCol rightCol2" method="post" action="register" style="padding-top: 0px"
+              id="myForm">
+            <h3 class="title tColor1">注册</h3>
+            <div class="formRow">
+                <label class="formLabel">姓名*:</label>
+                <input class="formInput" type="text" name="fullname">
+                <!--<label class="tip tColor1">不可更改</label>-->
+            </div>
+            <div class="formRow">
+                <label class="formLabel">邮箱*:</label>
+                <input class="formInput" type="text" name="email">
+                <label class="tip tColor1">不可更改</label>
+            </div>
+            <div class="formRow">
+                <label class="formLabel">密码*:</label>
+                <input class="formInput" type="password" name="password" id="password">
+            </div>
+            <div class="formRow">
+                <label class="formLabel">确认*:</label>
+                <input class="formInput" type="password" name="confirmPwd">
+            </div>
+            <input type="submit" value="注册" class="btn btn1">
+        </form>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/register.js"></script>
+</body>
+</html>

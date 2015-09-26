@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/lib/date_input.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var locState="{{account.user.loc_state}}";
+        var locCity="{{account.user.loc_city}}";
+        var locCountry="{{account.user.loc_country}}";
+        var userId="{{current_user.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <div class="section">
+        <h2 class="singleTitle icon7">修改个人资料</h2>
+        <div class="content">
+            <form class="hForm col2" id="myForm" method="post" action="user/{{current_user.id}}/me/edit-info">
+                <div class="leftCol leftCol1" id="thumbUploadContainer">
+                    <img id="thumbShow" style="max-height: 210px;" class="widthAll"  src="{{account.user_profile}}">
+                    <input type="hidden" name="profile" id="thumb" value="{{account.user_profile}}">
+                    <input type="button" id="thumbUploadBtn" value="上传" class="btn centerBtn">
+                    <p class="tColor1 tip1">建议1:1的jpg、png图片,不大于500x500px</p>
+                </div>
+
+                <div class="rightCol rightCol1">
+                    <div class="formRow">
+                        <label class="formLabel">姓名*:</label>
+                        <input class="formInput" type="text" name="fullname" value="{{account.fullname}}">
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">性别*:</label>
+                        <select class="formInput" name="genre">
+                            <option value="">请选择</option>
+                            {% for status in [{"name":"男","value":"男"},{"name":"女","value":"女"}] %}
+                            {% if status.value== account.user.genre %}
+                            <option selected value="{{status.value}}">{{status.name}}</option>
+                            {%  else %}
+                            <option value="{{status.value}}">{{status.name}}</option>
+                            {% endif %}
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">生日*:</label>
+                        <input class="formInput" type="text" name="birthday" id="birthday" value="{{account.user.birthday}}">
+                    </div>
+                    <div id="selectGroup">
+                        <div class="formRow">
+                            <label class="formLabel">省*:</label>
+                            <select class="formInput province" name="loc_state" data-value="{{account.user.loc_state}}">
+
+                            </select>
+                        </div>
+                        <div class="formRow">
+                            <label class="formLabel">市*:</label>
+                            <select class="formInput city" name="loc_city" data-value="{{account.user.loc_city}}">
+
+                            </select>
+                        </div>
+                        <div class="formRow">
+                            <label class="formLabel">县/区:</label>
+                            <select class="formInput area" name="loc_county" data-value="{{account.user.loc_country}}">
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="formRow" >
+                    <label class="formLabel">地址*:</label>
+                    <input  class="formInput" type="text" name="loc_address" value="{{account.user.loc_address}}">
+                </div>
+                <div class="formRow" style="margin-top: 50px;">
+                    <label class="formLabel">联系方式*:</label>
+                    <input  class="formInput" type="text" name="contact_me" value="{{account.user.contact_me}}">
+                </div>
+                <div class="formRow" >
+                    <label class="formLabel">个人描述:</label>
+                    <textarea class="formTxtArea formInput" name="intro">{{account.user.intro}}</textarea>
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+
+
+    {% include "frontend/footer.html" %}
+</div>
+
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/jquery.date_input.js"></script>
+<script src="static/lang/frontend/jquery.date_input.zh_CN.js"></script>
+<script src="static/js/frontend/lib/qiniu.js"></script>
+<script src="static/js/frontend/lib/plupload.full.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/editInfo.js"></script>
+
+</body>
+</html>

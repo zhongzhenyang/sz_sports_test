@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="container container1">
+    {% include 'frontend/header.html' %}
+
+    <div class="section">
+        <h1 style="text-align: center;margin-top: 30px;">{{error.error_code}},{{error.message}}！</h1>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+</body>
+</html>

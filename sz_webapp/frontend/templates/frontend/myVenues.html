@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="trTpl">
+        {@if !noData}
+        {@each results as r}
+        <tr>
+            <td class="titleTd"><a href="user/sites/${r.id}" class="ellipsis">${r.name}</a></td>
+            <td>${r.athletic_item.name}</td>
+            <td>
+                <a class="delete iconDelete" href="${r.id}">删除</a>
+            </td>
+        </tr>
+        {@/each}
+        {@else}
+        <tr>
+            <td colspan="3">${noData}</td>
+        </tr>
+        {@/if}
+
+    </script>
+
+    <div class="section section3">
+        <h2 class="singleTitle icon7">我的消息</h2>
+        <table class="table" id="myTable">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>项目</th>
+                <th>处理</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <a href="user/sites/create" class="btn centerBtn">新建</a>
+    </div>
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/myVenues.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+    "success":true,
+    "results":[{
+        "id":1,
+        "type":1,
+        "time":"19:34",
+        "team":"xxxx",
+        "goalPlayer":"xxxx",
+        "assistPlayer":"xxxxx"
+    },{
+        "id":1,
+        "type":2,
+        "time":"39:34",
+        "team":"xxxx",
+        "goalPlayer":"xxxx",
+        "assistPlayer":"xxxxx"
+    },{
+        "id":1,
+        "type":3,
+        "time":"49:34",
+        "team":"xxxx",
+        "goalPlayer":"xxxx",
+        "assistPlayer":"xxxxx"
+    }]
+}

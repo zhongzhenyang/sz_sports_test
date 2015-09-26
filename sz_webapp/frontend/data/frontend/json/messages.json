@@ -1,0 +1,16 @@
+{
+    "success":"true",
+    "results":[{
+        "sender":"小刚",
+        "type":1,
+        "status":0
+    },{
+        "sender":"xxxx球队",
+        "type":2,
+        "status":1
+    },{
+        "sender":"xxx",
+        "type":1,
+        "status":2
+    }]
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+        var userId="{{account.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+{% include "frontend/header.html" %}
+
+<script type="text/template" id="sportTpl">
+    <li>
+        <a class="item" href="user/{{account.id}}/athletics/${id}">
+            <img class="widthAll" src="${logo}">
+        </a>
+        <div class="item item1">
+            <a href="search/?type=team&sport_id=${id}" class="btn">加入球队</a>
+            <a href="user/teams/create?sport_id=${id}" class="btn">创建球队</a>
+        </div>
+    </li>
+</script>
+
+<script type="text/template" id="sportsTpl">
+    {@each results as r }
+    <option value="${r.id}">${r.name}</option>
+    {@/each}
+</script>
+
+<script type="text/template" id="waterfallTpl">
+    {@each results as r}
+    <li class="waterfall-item">
+        <a href="${r.details.image}" target="_blank">
+            <img src="${r.details.image}" width="${r.details.width}" height="${r.details.height}">
+        </a>
+    </li>
+    {@/each}
+</script>
+
+<script type="text/template" id="attentionTpl">
+    {@each results as r}
+    <li>
+        <a href="user/${r.account.id}/me/">
+            <img src="${r.account.user_profile}">
+            <div class="infoBg"></div>
+            <div class="info">
+                <h3 class="title ellipsis">${r.account.fullname}</h3>
+            </div>
+        </a>
+    </li>
+    {@/each}
+</script>
+
+
+
+<div class="section">
+    <h2 class="singleTitle icon5">个人主页&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">{{account.fullname}}</span></h2>
+    <div class="content infoContainer content1 col2">
+
+        <div class="leftCol leftCol3 col2">
+            <img class="leftCol leftCol1" src="{{account.user_profile}}">
+            <div class="rightCol">
+                <div class="titleContainer">
+                    {% if current_user.is_authenticated() and current_user.id!=account.id %}
+                    <input class="btn fRight hidden" id="attention" value="关注">
+                    <input class="btn fRight hidden" id="unAttention" value="取消关注">
+                    {% endif %}
+                    <h3  class="title title1">{{account.fullname}}</h3>
+                </div>
+                {% if account.user %}
+                <span class="intro">
+                    <label>性别:</label>
+                    <span>{{account.user.genre}}</span>
+                </span>
+                <span class="intro">
+                    <label>生日:</label>
+                    <span>{{account.user.birthday}}</span>
+                </span>
+                <br>
+                <span class="intro">
+                    <label>个人描述:</label>
+                    <span>{{account.user.intro}}</span>
+                </span>
+                <br>
+                <span class="intro">
+                    <label>地址:</label>
+                    <span>{{account.user.loc_state}}{{account.user.loc_city}}
+                        {{account.user.loc_country}}{{account.user.loc_address}}</span>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="rightCol rightCol3">
+            <h3 class="colTitle">项目&amp;球队</h3>
+            <ul class="list11" id="sports">
+                <span class="seg">分割线</span>
+                    {% for athlete in account.active_athletes %}
+                        {% if athlete.athletic_item.enabled %}
+                        <li>
+                            <a class="item" href="user/{{account.id}}/athletics/{{athlete.athletic_item_id}}">
+                                <img  class="widthAll"  src="{{athlete.athletic_item.logo}}">
+                            </a>
+                            {% if athlete.current_team %}
+                            <a class="item" href="user/teams/{{athlete.current_team.team_id}}">
+                                <img  class="widthAll" src="{{athlete.current_team.team.logo}}">
+                            </a>
+                            {% else %}
+                                {% if current_user.id==account.id %}
+                                <div class="item item1">
+                                    <a href="search/?type=team&sport_id={{athlete.athletic_item_id}}" class="btn">加入球队</a>
+                                    <a href="user/teams/create?sport_id={{athlete.athletic_item_id}}" class="btn">创建球队</a>
+                                </div>
+                                {% else %}
+                                <div class="item item1">
+                                    <span class="tip">暂无球队</span>
+                                </div>
+                                {% endif %}
+                            {% endif %}
+
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if current_user.id==account.id %}
+                    <li>
+                        <div class="item item2">
+                            <span class="tip" id="addSports">+</span>
+                        </div>
+                    </li>
+                    {% endif %}
+                    {% if not account.active_athletes and current_user.id!=account.id %}
+                    <li>
+                        <div class="item item1">
+                            <span class="tip">暂无项目</span>
+                        </div>
+                    </li>
+                    {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% if account.competition_prizes %}
+<div class="section section1">
+    <h3  class="sTitle">荣誉榜</h3>
+    <ul class="list11">
+        <span class="seg seg1">分割线</span>
+        {% for cp in account.competition_prizes %}
+        <li>
+            <a href="user/competitions/{{cp.competition_team.competition.id}}">
+                <span class="awards">{{cp.competition_team.prize}}</span>
+                <h4 class="title ellipsis">{{cp.competition_team.competition.name}}</h4>
+            </a>
+        </li>
+        {% endfor %}
+
+    </ul>
+</div>
+{% endif %}
+
+{% if account.recent_fixture %}
+
+<div class="section section1">
+    <h3  class="sTitle">比赛</h3>
+    <ul class="list8">
+        {% for rf in account.recent_fixture %}
+        {% if loop.index<=4 %}
+        <li class="status{{rf.status}}">
+            <a href="user/{{rf.competition_id}}/competition-fixtures/{{rf.id}}">
+                <div class="player">
+                    <img src="{{ rf.p1_competition_team.team.creator.user_profile  if
+                    rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}">
+                        {{rf.p1_competition_team.team.creator.fullname if
+                          rf.p1_competition_team.team.type==0 else rf.p1_competition_team.team.name }}
+                          </span>
+                </div>
+                    <span class="info iconVs">
+                        {% if rf.p1_score or rf.p1_score==0 %}
+                        <span class="score">{{rf.p1_score}}:{{rf.p2_score}}</span>
+                        {% endif %}
+                    </span>
+                <div class="player">
+                    <img src="{{ rf.p2_competition_team.team.creator.user_profile  if
+                    rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.logo }}">
+                    <span class="name"
+                          title="{{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}">
+                        {{rf.p2_competition_team.team.creator.fullname if
+                          rf.p2_competition_team.team.type==0 else rf.p2_competition_team.team.name }}
+                          </span>
+                </div>
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/accounts/{{account.id}}/fixtures?type=user" class="btn rightBtn">更多比赛</a>
+</div>
+{% endif %}
+
+{% if account.recent_competitions %}
+<div class="section section1">
+    <h3  class="sTitle">赛事统计</h3>
+    <ul class="list10">
+        {% for rc in account.recent_competitions %}
+        {% if loop.index<=4 %}
+        <li class="status{{rc.competition.status}}">
+            {% if rc.competition.status>=1 %}
+            <a href="user/competitions/{{rc.competition.id}}">
+                {% else %}
+                <a href="user/competitions/{{rc.competition.id}}/register">
+                    {% endif %}
+                    <img class="thumb" src="{{rc.competition.logo}}">
+                    <h3 class="title ellipsis">{{rc.competition.name}}</h3>
+
+                    <p class="intro">
+                        <label class="introC">名次</label>
+                        {% if rc.prize %}
+                        <span class="introC">{{rc.prize}}</span>
+                        {% endif %}
+                    </p>
+                    <p class="intro">
+                        <label class="introC">胜/负/平</label>
+                        {% if rc.latest_rank and rc.competition.status>=1 %}
+                        <span class="introC">{{rc.latest_rank.addition.won}}/
+                            {{rc.latest_rank.addition.lost}}/
+                            {{rc.latest_rank.addition.drawn}}
+                        </span>
+                        {% endif %}
+                    </p>
+                    <p class="intro">
+                        <label class="introC">净失球</label>
+                        {% if rc.latest_rank and rc.competition.status>=1 %}
+                        <span class="introC">{{rc.latest_rank.addition.goals_for}}/
+                            {{rc.latest_rank.addition.goals_against}}
+                        </span>
+                        {% endif %}
+                    </p>
+
+                    <p class="intro">
+                        <label class="introC">积分</label>
+                        {% if rc.latest_rank and rc.c_type==2 %}
+                        <span class="introC">{{rc.latest_rank.pts}}</span>
+                        {% endif %}
+                    </p>
+
+                </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    <a href="user/accounts/{{account.id}}/competitions?type=user" class="btn rightBtn">更多赛事</a>
+</div>
+{% endif %}
+
+
+<div class="section section1" id="attentionsSection">
+    <h3  class="sTitle">已关注</h3>
+    <ul class="list4 list5" id="attentions">
+
+
+    </ul>
+</div>
+
+<div class="section section1" id="splendidSection">
+    <h3  class="sTitle">精彩记忆</h3>
+    <ul id="waterfallContainer">
+
+
+    </ul>
+
+</div>
+
+{% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<div class="popWindow hidden" id="popWindow">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight" id="closePopWindow">X</span>
+        <div class="content">
+            <form class="vForm">
+                <div class="formRow">
+                    <label class="formLabel">项目*:</label>
+                    <select class="formInput" id="allSports">
+
+                    </select>
+                </div>
+                <input type="button" value="加入" id="joinSports" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/myHome.js"></script>
+</body>
+</html>

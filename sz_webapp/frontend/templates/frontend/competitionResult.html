@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/lib/date_input.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+        var competitionId="{{competition.id}}";
+        var currentUserId="{{current_user.id}}";
+        var managerId="{{competition.manager_id}}";
+        var competitionFixtureId="{{competition_fixture.id}}";
+        var goalRequire="{{competition_fixture.competition.athletic_item.options.goals_require}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+    <script type="text/template" id="playerTpl">
+        {@each results as r}
+        <option value="${r.id}">${r.fullname}</option>
+        {@/each}
+    </script>
+
+    <script type="text/template" id="waterfallTpl">
+        {@each results as r}
+        <li class="waterfall-item">
+            <a href="${r.details.image}" target="_blank">
+                <img src="${r.details.image}" width="${r.details.width}" height="${r.details.height}">
+            </a>
+        </li>
+        {@/each}
+    </script>
+
+    <script type="text/template" id="goalRecordTpl">
+        {@each results as r}
+            <tr>
+                <td><span class="type iconGoal${r.type}">类型</span>${r.time_scored}</td>
+                <td><a href="user/teams/${r.team.id}">${r.team.name}</a></td>
+                <td><a href="user/${r.scorer.id}/me">${r.scorer.fullname}</a></td>
+                <td><a href="user/${r.assistant.id}/me">${r.assistant.fullname}</a>
+                    {@if canCtrl}
+                    <a href="${r.id}" class="delete iconDelete">X</a>
+                    {@/if}
+                </td>
+            </tr>
+        {@/each}
+    </script>
+    <script type="text/template" id="goalRecordSingleTpl">
+        <tr>
+            <td><span class="type iconGoal${type}">类型</span>${time}</td>
+            <td><a href="#">${team}</a></td>
+            <td><a href="#">${goalPlayer}</a></td>
+            <td><a href="#">${assistPlayer}</a>
+                {@if canCtrl}
+                <a href="${id}" class="delete iconDelete">X</a>
+                {@/if}
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/template" id="sectionRecordTpl">
+        {@each results as r}
+        <tr>
+            <td>${r.sn}</td>
+            <td>${r.p1_goals}:${r.p2_goals}
+                {@if canCtrl}
+                <a href="${r.id}" class="delete iconDelete">X</a>
+                {@/if}
+            </td>
+        </tr>
+        {@/each}
+    </script>
+    <script type="text/template" id="sectionRecordSingleTpl">
+        <tr>
+            <td>${r.sn}</td>
+            <td>${r.p1_goals}:${r.p2_goals}
+                {@if canCtrl}
+                <a href="${r.id}" class="delete iconDelete">X</a>
+                {@/if}
+            </td>
+        </tr>
+    </script>
+
+<div class="section">
+    <h2 class="singleTitle icon5">赛事/活动&nbsp;&nbsp;&gt;&nbsp;&nbsp;<span style="font-size: 18px;">比赛</span></h2>
+    <div class="content infoContainer">
+
+        <div class="titleContainer">
+            {% if (not competition_fixture.p1_score and competition_fixture.p1_score!=0)  and competition_fixture.status!=2 and
+            (competition.manager_id==current_user.id or (competition_fixture.notary_id and competition_fixture.notary_id==current_user.id)
+            or (competition_fixture.referee_id and competition_fixture.referee_id==current_user.id)) %}
+
+            <input class="btn fRight" id="addScore" value="添加比分">
+            <input class="btn fRight" id="delete" value="删除">
+            <input class="btn fRight" id="edit" value="修改">
+            {% endif %}
+            <!--<input class="btn fRight" value="结束">-->
+            <h3  class="title title1">
+                {{competition_fixture.p1_competition_team.team.name if competition_fixture.p1_competition_team.team.type!=0 else
+                competition_fixture.p1_competition_team.team.creator.fullname}}
+                &nbsp;&nbsp;VS&nbsp;&nbsp;
+                {{competition_fixture.p2_competition_team.team.name if competition_fixture.p2_competition_team.team.type!=0 else
+                competition_fixture.p2_competition_team.team.creator.fullname}}</h3>
+        </div>
+
+        <span class="intro">
+            <label>项目:</label>
+            <span>{{competition.athletic_item.name}}</span>
+        </span>
+
+        {% if competition.c_type!=0 %}
+        <span class="intro">
+            <label>所属赛事/活动:</label>
+            <span><a href="user/competitions/{{competition.id}}" class="tColor1">{{competition.name}}</a></span>
+        </span>
+        <span class="intro">
+            <label>城市:</label>
+            <span>{{competition.loc_state}}{{competition.loc_city}}{{competition.loc_country}}</span>
+        </span>
+        {% endif %}
+
+        <span class="intro">
+            <label>比赛时间:</label>
+            <span>{{competition_fixture.date_started}}</span>
+        </span>
+        {% if competition_fixture.notary_id %}
+        <span class="intro">
+            <label>公证人:</label>
+
+            <span><a href="user/{{competition_fixture.notary_id}}/me" class="tColor1">{{competition_fixture.notary.fullname}}</a></span>
+
+        </span>
+        {% endif %}
+        {% if competition_fixture.referee_id %}
+        <span class="intro">
+            <label>裁判:</label>
+
+            <span><a href="user/{{competition_fixture.referee_id}}/me" class="tColor1">{{competition_fixture.referee.fullname}}</a></span>
+
+        </span>
+        {% endif %}
+        {% if competition_fixture.round %}
+        <span class="intro">
+            <label>轮次:</label>
+            <span>{{competition_fixture.round}}</span>
+        </span>
+        {% endif %}
+        {% if competition_fixture.sn %}
+        <span class="intro">
+            <label>场次:</label>
+            <span>{{competition_fixture.sn}}</span>
+        </span>
+        {% endif %}
+        <span class="intro">
+            <label class="introTxtLabel">场馆:</label>
+            <span>{{competition_fixture.site}}</span>
+        </span>
+    </div>
+</div>
+
+<div class="section" style="width:70%;margin:80px auto 0 auto">
+    <div class="vsInfo">
+        <div class="player">
+            {% if competition_fixture.p1_competition_team.team.type==0 %}
+            <a href="user/{{competition_fixture.p1_competition_team.team.creator.id}}/me">
+            {% else %}
+                <a href="user/teams/{{competition_fixture.p1_competition_team.team.team_id}}">
+            {% endif %}
+                <img class="widthAll"
+                    src="{{ competition_fixture.p1_competition_team.team.creator.user_profile if competition_fixture.p1_competition_team.team.type==0 else competition_fixture.p1_competition_team.team.logo }}">
+            </a>
+            <p class="name">{{competition_fixture.p1_competition_team.team.name if competition_fixture.p1_competition_team.team.type!=0 else
+                competition_fixture.p1_competition_team.team.creator.fullname}}</p>
+            {% if competition_fixture.p1_score or competition_fixture.p1_score==0 %}
+            <p class="score tColor1">{{competition_fixture.p1_score}}</p>
+            {% endif %}
+        </div>
+        <div class="vs">
+            <img src="static/images/frontend/app/vs.png">
+        </div>
+        <div class="player">
+            {% if competition_fixture.p2_competition_team.team.type==0 %}
+            <a href="user/{{competition_fixture.p2_competition_team.team.creator.id}}/me">
+                {% else %}
+                <a href="user/teams/{{competition_fixture.p2_competition_team.team.team_id}}">
+                    {% endif %}
+                <img class="widthAll"
+                     src="{{ competition_fixture.p2_competition_team.team.creator.user_profile if
+                     competition_fixture.p2_competition_team.team.type==0 else competition_fixture.p2_competition_team.team.logo }}">
+            </a>
+            <p class="name">{{competition_fixture.p2_competition_team.team.name if
+                competition_fixture.p2_competition_team.team.type!=0 else
+                competition_fixture.p2_competition_team.team.creator.fullname}}</p>
+            {% if competition_fixture.p2_score or competition_fixture.p2_score==0 %}
+            <p class="score tColor1">{{competition_fixture.p2_score}}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if competition_fixture.competition.athletic_item.options.goals_require=="true" %}
+    <div class="scoreRecord" id="goalsSection">
+        <table class="table" style="width:100%" id="goalRecords">
+            <thead>
+            <tr>
+                <th>时间</th>
+                <th>球队</th>
+                <th>进球</th>
+                <th>助攻</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        {% if competition.manager_id==current_user.id or (competition_fixture.notary_id and competition_fixture.notary_id==current_user.id)
+        or (competition_fixture.referee_id and competition_fixture.referee_id==current_user.id) %}
+        <button id="addGoalRecord" class="btn centerBtn">添加进球纪录</button>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if competition_fixture.competition.athletic_item.options.branch_require=="true" %}
+    <div id="recordsSection">
+        <table class="table" style="width:100%" id="sectionRecords">
+            <thead>
+            <tr>
+                <th>局数</th>
+                <th>比分</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        {% if competition.manager_id==current_user.id or (competition_fixture.notary_id and competition_fixture.notary_id==current_user.id)
+        or (competition_fixture.referee_id and competition_fixture.referee_id==current_user.id) %}
+        <button id="addSectionRecord" class="btn centerBtn">添加分局纪录</button>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+<div class="section" style="width:90%;margin: auto" id="addImageContainer">
+    <h3  class="sTitle" style="margin-left: 10%">精彩记忆</h3>
+    <button class="btn" style="display: inline-block;margin-left: 50px;" id="addImage">添加</button>
+    <ul class="list6" id="waterfallContainer">
+
+    </ul>
+</div>
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+<div class="popWindow hidden" id="popWindow">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight closePopWindow">X</span>
+        <div class="content">
+            <form class="hForm" id="myForm" method="post"
+                  action="user/{{competition.id}}/competition-fixtures/{{competition_fixture.id}}/submit-result">
+                <div class="formRow">
+                    <label class="formLabel">p1分数*:</label>
+                    <input class="formInput" type="text" name="p1_score">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">p2分数*:</label>
+                    <input class="formInput" type="text" name="p2_score">
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="popWindow hidden" id="popWindow1">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight closePopWindow">X</span>
+        <div class="content">
+            <form class="hForm" id="myForm1" action="user/match-results/add-goal" method="post">
+                <input type="hidden" name="competition_fixture_id" value="{{competition_fixture.id}}">
+                <div class="formRow" style="padding-left: 20%">
+                    <input  type="radio" class="formRadio" name="type" value="0" checked>
+                    <label class="hasIcon iconGoal1">进球</label>
+                    <input  type="radio" class="formRadio" name="type" value="1">
+                    <label class="hasIcon iconGoal2">点球</label>
+                    <input  type="radio" class="formRadio" name="type" value="2">
+                    <label class="hasIcon iconGoal3">乌龙</label>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">时间*:</label>
+                    <input class="formInput" type="text" name="time_scored">
+                    <label class="tip tColor1">格式19:34,注意是英文的冒号</label>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">球队*:</label>
+                    <select class="formInput" name="team_id">
+                        <option value="">请选择</option>
+                        <option value="{{competition_fixture.p1_competition_team.team.id}}">{{competition_fixture.p1_competition_team.team.name}}</option>
+                        <option value="{{competition_fixture.p2_competition_team.team.id}}">{{competition_fixture.p2_competition_team.team.name}}</option>
+                    </select>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">进球者*:</label>
+                    <select class="formInput players" name="scorer_id">
+                        <option value="">请选择</option>
+
+                    </select>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">助攻者*:</label>
+                    <select class="formInput players" name="assistant_id">
+                        <option value="">请选择</option>
+
+                    </select>
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="popWindow hidden" id="popWindow2">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight closePopWindow">X</span>
+        <div class="content">
+            <form class="vForm" id="myForm2" method="post" action="user/match-results/add-section">
+                <input type="hidden" name="competition_fixture_id" value="{{competition_fixture.id}}">
+                <div class="formRow" style="margin-top: 30px;">
+                    <label class="formLabel">局数*:</label>
+                    <input class="formInput" type="text" name="sn">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">p1分数*:</label>
+                    <input class="formInput" type="text" name="p1_goals">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">p2分数*:</label>
+                    <input class="formInput" type="text" name="p2_goals">
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="popWindow hidden" id="popWindow3">
+    <div class="blackout">遮盖层</div>
+    <div class="window">
+        <span class="close fRight closePopWindow">X</span>
+        <div class="content">
+            <form class="hForm" id="myForm3" method="post"
+                  action="user/{{competition.id}}/competition-fixtures/{{competition_fixture.id}}/update">
+                <div class="formRow" style="margin-top: 30px;">
+                    <label class="formLabel">场馆*:</label>
+                    <input class="formInput" type="text" name="site" value="{{competition_fixture.site}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">比赛时间*:</label>
+                    <input class="formInput" type="text" id="date" name="date_started" value="{{competition_fixture.date_started}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">轮次:</label>
+                    <input  class="formInput" type="text" name="round" id="round"
+                            value="{{competition_fixture.round if competition_fixture.round else ''}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">场次:</label>
+                    <input  class="formInput" type="text" name="sn" id="sn"
+                            value="{{competition_fixture.sn if competition_fixture.sn else ''}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">公证人:</label>
+                    <input  class="formInput" type="text" name="notary_name" id="search1"
+                            value="{{competition_fixture.notary.fullname if competition_fixture.notary else ''}}">
+                    <input type="hidden" name="notary_id" id="notary"
+                           value="{{competition_fixture.notary_id}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">裁判:</label>
+                    <input  class="formInput" type="text" name="referee_name" id="search2"
+                            value="{{competition_fixture.referee.fullname if competition_fixture.referee else ''}}">
+                    <input type="hidden" name="referee_id" id="referee"
+                           value="{{competition_fixture.referee_id if competition_fixture.referee_id else ''}}">
+                </div>
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include "frontend/loading.html" %}
+
+<span class="returnTop" id="returnTop">返回顶部</span>
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.marcopolo.min.js"></script>
+<script src="static/js/frontend/lib/jquery.date_input.js"></script>
+<script src="static/lang/frontend/jquery.date_input.zh_CN.js"></script>
+<script src="static/js/frontend/lib/waterfall.min.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/qiniu.js"></script>
+<script src="static/js/frontend/lib/plupload.full.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitionResult.js"></script>
+</body>
+</html>

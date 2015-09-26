@@ -1,0 +1,575 @@
+/**
+*lists
+*/
+/*首页新闻*/
+.list{
+    width: 96%;
+    margin: auto;
+    border-top: 1px dashed #0db3c7;
+    border-bottom: 1px dashed #0db3c7;
+    font-size: 0px;
+}
+.list li{
+    width: 60%;
+    display: block;
+    margin: auto;
+    border-bottom: 1px dashed #0db3c7;
+}
+.list li:last-child{
+    border: none;
+}
+.list li a{
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    font-size: 16px;
+    color: #999;
+}
+.list li .title{
+    margin: 0px 180px 0px 0px;
+}
+.list li .date{
+    float: right;
+}
+.list li .sports{
+    float: right;
+    margin-right: 65px;
+}
+.list li:hover .title,.list li:hover .date{
+    color: #0db3c7;
+}
+/*底部*/
+.list1{
+    width: 96%;
+    border-bottom: 1px solid #ccc;
+    margin: auto;
+    font-size: 0px;
+    padding-bottom: 20px;
+}
+.list1 li{
+    width: 26%;
+    margin:0px 3.66%;
+    color: #fff;
+    font-size: 0px;
+}
+.list1 li .title{
+    font-size: 16px;
+    font-weight: normal;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+
+}
+.list1 li:first-child+li .title{
+    text-align: center;
+}
+.list1 li img{
+    width: 50%;
+    height: auto;
+    display: inline-block;
+    border: 1px solid #fff;
+}
+.list1 li .intro{
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: top;
+    width: 45%;
+    margin-left: 4%;
+    margin-top: 20px;
+}
+.list1 li .txt{
+    font-size: 14px;
+
+}
+/*场馆*/
+.list2{
+    padding:20px 5%;
+    font-size: 0px;
+}
+.list2 li{
+    display: block;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    padding:20px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.list2 li a{
+    display: block;
+}
+.list2 li .thumb{
+    width: 20%;
+    height: auto;
+    min-width: 240px;
+}
+.list2 li .info{
+    position: absolute;
+    left:25%;
+    top:0px;
+    right: 0px;
+    bottom: 0px;
+}
+.list2 li .title{
+    font-size: 18px;
+}
+.list2 li .intro{
+    color: #999;
+    font-size: 14px;
+}
+.list2 li:hover .intro{
+    color: #0db3c7;
+}
+/*赛事页*/
+.list3 li{
+    border-top:1px dashed #ccc;
+    padding: 20px 15% 20px 5%;
+    display: block;
+    font-size: 0px;
+}
+.list3 li a{
+    display: block;
+    position: relative;
+}
+.list3 li .thumb{
+    width: 10%;
+    height: auto;
+}
+.list3 li .info{
+    position: absolute;
+    left:15%;
+    top:0px;
+    right: 0px;
+    bottom: 0px;
+}
+.list3 li .titleContainer{
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+.list3 li .title{
+    width: 60%;
+    margin: 0px;
+}
+.list3 li .status{
+    float: right;
+    font-size: 14px;
+    line-height: 28px;
+}
+.list3 li .intro{
+    font-size: 14px;
+    color: #999;
+    display: inline-block;
+    margin: 10px 5% 5px 0px;
+}
+.list3 li .intro .introTxtLabel{
+    vertical-align: top;
+}
+.list3 li .intro .introTxt{
+    width: 150px;
+    display: inline-block;
+    vertical-align: top;
+}
+.list3 li:hover .title{
+    color: #0db3c7;
+}
+/*list4搜索页*/
+.list4{
+    font-size: 0px;
+    text-align: center;
+}
+.list4 li{
+    width:200px;
+    height: 200px;
+    position: relative;
+    margin: 10px;
+    overflow: hidden;
+    padding:5px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+}
+.list4 li a{
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+.list4 li img{
+    width: 100%;
+    height: auto;
+    border-radius: 95px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background: #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    overflow: hidden;
+    box-shadow:0px 0px 5px #ccc;
+}
+.list4 li .infoBg{
+    right:10px;
+    bottom:10px;
+    position: absolute;
+    border-radius: 90px;
+    top:10px;
+    left:10px;
+    background: #0db3c7;
+    opacity: .8;
+    filter:alpha(opacity=80);
+    display: none;
+}
+.list4 li .info{
+    position: absolute;
+    top:80px;
+    left:0px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    display: none;
+}
+.list4 li .info .title{
+    font-size: 18px;
+    margin: auto;
+    width: 80%;
+    text-align: center;
+    color: #fff;
+}
+.list4 li .info .excerpt{
+    font-size: 14px;
+    margin: 5px auto;
+    width: 80%;
+    text-align: center;
+}
+.list4 li a:hover .infoBg{
+    display: block;
+}
+.list4 li a:hover .info{
+    display: block;
+}
+/*已报名*/
+.list5{
+    text-align: left;
+    font-size: 0px;
+}
+.list5 li{
+    margin-left: 0px;
+    width: 11%;
+    height: auto;
+    margin-right: 1.5%;
+    padding:0px;
+}
+.list5 li img{
+    border-radius: 0px;
+}
+.list5 li .info{
+    top:30px;
+}
+.list5 li .infoBg{
+    border-radius: 0px;
+    bottom:5px;
+    right:5px;
+    top:5px;
+    left:5px;
+}
+/**精彩瞬间，采用瀑布流不再需要*/
+.list6{
+    font-size: 0px;
+}
+.list6 li{
+    width: 23%;
+    margin-right: 2%;
+}
+/**比赛记录*/
+/*小组赛*/
+.list7{
+    font-size: 0px;
+}
+.list7>li{
+    border-right: 1px dashed #999;
+    width: 25%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.list7>li:last-child{
+    border: none;
+}
+.list7 .title{
+    font-size: 16px;
+    text-align: center;
+}
+.list7s1{
+
+}
+.list7s1 li{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 5%;
+}
+.list7s1 li a{
+    display: block;
+}
+.list7s1 li .player{
+    width: 40%;
+    height: 40%;
+    display: inline-block;
+    vertical-align: top;
+}
+.list7s1 li .player img{
+    width: 80%;
+    height:auto;
+}
+.list7s1 li .player .name{
+    font-size: 12px;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
+.list7s1 li .info{
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    text-align: center;
+    padding-top: 20px;
+    background-position: top center;
+}
+.list7s1 li .info .score{
+    display: block;
+    font-size: 16px;
+    color: #0db3c7;
+    font-weight: bold;
+    margin-top: 40px;
+}
+/*普通比赛*/
+.list8{
+    font-size: 0px;
+}
+.list8 li{
+    width: 23%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    text-align: center;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 1%;
+    border-radius: 5px;
+}
+.list8 li a{
+    display: block;
+}
+.list8 li .player{
+    width: 40%;
+    height: 40%;
+    display: inline-block;
+    vertical-align: top;
+}
+.list8 li .player img{
+    width: 80%;
+    height:auto;
+}
+.list8 li .player .name{
+    font-size: 12px;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
+.list8 li .info{
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    text-align: center;
+    padding-top: 20px;
+    background-position: top center;
+}
+.list8 li .info .score{
+    display: block;
+    font-size: 16px;
+    color: #0db3c7;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.list8 .status0 .info{
+    margin-top: 15%;
+}
+/**合作伙伴*/
+.list9{
+
+    font-size: 0px;
+}
+.list9 li{
+    width: 19%;
+    margin:0px 1% 1% 0px;
+}
+/*个人主页赛事统计*/
+.list10{
+
+    font-size: 0px;
+}
+.list10 li{
+    border: 1px solid #999;
+    border-radius: 5px;
+    padding: 2%;
+    width: 23%;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.list10 li .thumb{
+    width: 40%;
+    margin:auto;
+}
+.list10 li .title{
+    font-size: 20px;
+    padding-bottom: 5px;
+    color: #999;
+    border-bottom: 1px solid #999;
+}
+.list10 li .intro{
+    font-size: 14px;
+    color: #999;
+}
+.list10 li .intro .introC{
+    display: inline-block;
+    text-align: center;
+    width: 45%;
+}
+/*荣誉板*/
+.list11{
+   position: relative;
+    font-size: 0px;
+}
+.list11 .seg{
+    border: 2px dashed #ccc;
+    height: 100%;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    margin-left: -2px;
+    font-size: 0px;
+}
+.list11 .seg1{
+    left:47.5%
+}
+.list11 li{
+    width: 50%;
+    margin: 10px 0px;
+    vertical-align: top;
+    position: relative;
+    min-height: 60px;
+}
+.list11 li a{
+    color: #999;
+    font-size: 14px;
+    display: block;
+}
+.list11 li .title{
+    width: 70%;
+    font-weight: normal;
+    margin: 0px;
+}
+.list11 li .awards{
+    float: right;
+    margin-right: 10%;
+}
+.list11 li a:hover{
+    color: #0db3c7;
+    font-size: 20px;
+}
+.list11 li .item{
+    display: inline-block;
+    width: 40%;
+    margin: 0px 5%;
+}
+.list11 li .item:first-child{
+
+}
+.list11 li .item1{
+    border: 1px dashed #ccc;
+    font-size: 14px;
+    position: absolute;
+    right:0px;
+    bottom: 0px;
+    text-align: center;
+    height: 100%;
+    color: #ccc;
+}
+.list11 li .item2{
+    width: 100%;
+    height: 30px;
+}
+.list11 li .item2 .tip{
+    font-size: 72px;
+    line-height: 72px;
+    color: #ccc;
+    cursor: pointer;
+}
+.list11 li .item .btn{
+    width: 100%;
+    margin: 5px 0px;
+    font-size: 12px;
+}
+.list11 li .item .btn:hover{
+    color: #fff;
+}
+.list11 li .item .tip{
+    position: absolute;
+    left:0;
+    top:50%;
+    width: 100%;
+    text-align: center;
+    margin-top: -10px;
+}
+/*球队球员*/
+.list12{
+
+    font-size: 0px;
+}
+.list12 li{
+    margin-left: 0px;
+    width: 11%;
+    height: auto;
+    margin-right: 1.5%;
+    margin-bottom: 20px;
+    padding:0px;
+    position: relative;
+}
+.list12 li img{
+    max-width: 100%;
+    width: 100%;
+}
+.list12 li .name{
+    font-size: 14px;
+    text-align: center;
+    margin: 5px 0px;
+}
+.list12 li .teamLeader{
+    position: absolute;
+    width: 39px;
+    height: 35px;
+    display: block;
+    z-index: 10;
+    right:0px;
+    top:0px;
+}
+.list12 li .ctrls{
+    position: absolute;
+    top:10px;
+    left:0px;
+    width: 100%;
+    display: none;
+}
+.list12 li .ctrls .btn{
+    width: 100%;
+    margin-top: 10px;
+}
+.list12 li:hover .ctrls{
+    display: block;
+}

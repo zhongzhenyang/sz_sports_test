@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "backend/head.html" %}
+
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.toastmessage.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+    <script src="static/js/backend/lib/jquery-2.0.3.min.js"></script>
+    <script src="static/js/backend/lib/bootstrap.min.js"></script>
+    <script src="static/js/backend/lib/jquery.dataTables.min.js"></script>
+    <script src="static/js/backend/lib/jquery.toastmessage.js"></script>
+    <script src="static/js/backend/src/config.js"></script>
+    <script src="static/js/backend/src/functions.js"></script>
+    <script src="static/js/backend/src/competitionsMgr.js"></script>
+</head>
+<body>
+
+{% include "backend/header.html" %}
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">赛事管理</h1>
+            </div>
+            <div class="panel-body" id="opt-body">
+                <div class="input-group tableSearchContainer col-md-6">
+                    <div class="col-md-7">
+                        <input type="text" id="searchContent" class="form-control" placeholder="名称">
+                    </div>
+                    <div class="col-md-4" >
+                        <select class="form-control" id="searchType">
+                            <option value="">全部</option>
+                            {% for ai in athletic_items %}
+                            <option value="{{ai.id}}">{{ai.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                    </div>
+                </div>
+                <table id="myTable" class="dataTable">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>项目</th>
+                        <th>类型</th>
+                        <th>置顶</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>
+                        <td><a href="#">xxxx联赛</a></td>
+                        <td>足球</td>
+                        <td>联赛</td>
+                        <td><a href="#" class="update">删除</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">xxxx联赛</a></td>
+                        <td>足球</td>
+                        <td>活动</td>
+                        <td><a href="#" class="update">删除</a></td>
+                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</section>
+
+
+{% include "backend/loading.html" %}
+
+
+</body>
+</html>

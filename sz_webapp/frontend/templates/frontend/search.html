@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="sportsTpl">
+        {@each results as r }
+        <option value="${r.id}">${r.name}</option>
+        {@/each}
+    </script>
+
+<script type="text/template" id="resultTpl">
+    {@if !noData}
+    {@each results as r}
+    <li>
+        {@if type==1}
+        <a href="user/${r.id}/me">
+            <img src="${r.user_profile}">
+            <div class="infoBg"></div>
+            <div class="info">
+                <h3 class="title ellipsis">${r.fullname}</h3>
+            </div>
+        {@else}
+            <a href="user/teams/${r.id}">
+                <img src="${r.logo}">
+                <div class="infoBg"></div>
+                <div class="info">
+                    <h3 class="title ellipsis">${r.name}</h3>
+                </div>
+        {@/if}
+
+
+        </a>
+    </li>
+    {@/each}
+    {@else}
+    <li class="tColor1 noData">${noData}</li>
+    {@/if}
+</script>
+
+<div class="section">
+    <h2 class="singleTitle icon7">找人&找球队</h2>
+    <div class="searchContainer">
+        <div class="columns">
+            <label>名称</label>
+            <input class="searchInputBox searchInputBox1" type="text" id="searchName">
+        </div>
+        <div class="columns">
+            <label>类别</label>
+            <select class="searchInputBox" id="searchType">
+                <option value="person">找人</option>
+                <option value="team">找球队</option>
+            </select>
+        </div>
+        <div class="columns">
+            <label>项目</label>
+            <select class="searchInputBox" id="searchCategory">
+                <option value="">所有</option>
+            </select>
+        </div>
+        <div class="columns" id="selectGroup">
+            <label>城市</label>
+            <select class="searchInputBox province" id="province">
+            </select>
+            <select class="searchInputBox city" id="city">
+            </select>
+            <select class="searchInputBox area" id="area">
+            </select>
+        </div>
+        <div class="columns">
+            <button class="btn" id="searchBtn">搜 索</button>
+        </div>
+    </div>
+    <ul class="list4" id="myList">
+
+    </ul>
+    <!--<a class="more" href="#">分页</a>-->
+</div>
+
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/search.js"></script>
+</body>
+</html>

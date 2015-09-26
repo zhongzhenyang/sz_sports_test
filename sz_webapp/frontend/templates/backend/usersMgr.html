@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+   {% include "backend/head.html" %}
+
+    <link href="static/css/backend/lib/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.dataTables.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/lib/jquery.toastmessage.css" rel="stylesheet" type="text/css">
+    <link href="static/css/backend/src/main.css" rel="stylesheet" type="text/css">
+    <script src="static/js/backend/lib/jquery-2.0.3.min.js"></script>
+    <script src="static/js/backend/lib/bootstrap.min.js"></script>
+    <script src="static/js/backend/lib/jquery.dataTables.min.js"></script>
+    <script src="static/js/backend/lib/jquery.toastmessage.js"></script>
+    <script src="static/js/backend/src/config.js"></script>
+    <script src="static/js/backend/src/functions.js"></script>
+    <script src="static/js/backend/src/usersMgr.js"></script>
+</head>
+<body>
+
+{% include "backend/header.html" %}
+
+<nav class="left">
+
+    {% include "backend/menu.html" %}
+
+</nav>
+
+<section class="right">
+    <article class="main">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">用户管理</h1>
+            </div>
+            <div class="panel-body" id="opt-body">
+                <div class="input-group tableSearchContainer col-md-6">
+                    <input type="text" id="searchContent" class="form-control" placeholder="姓名/邮箱">
+                    <span class="input-group-btn">
+                        <button id="searchBtn" class="btn btn-default" type="button">搜索</button>
+                    </span>
+                </div>
+                <table id="myTable" class="dataTable">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>
+                        <td><a href="#">dddddddd</a></td>
+                        <td>dddddddd</td>
+                        <td>启用</td>
+                        <td><a href="#" class="update">禁用</a></td>
+                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </article>
+</section>
+
+
+{% include "backend/loading.html" %}
+
+
+</body>
+</html>

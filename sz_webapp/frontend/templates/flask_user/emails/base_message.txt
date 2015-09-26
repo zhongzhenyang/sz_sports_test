@@ -1,0 +1,6 @@
+亲爱的用户，
+
+{% block message %}
+{% endblock %}
+
+石竹运动

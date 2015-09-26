@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="";
+    </script>
+</head>
+<body>
+<div class="container">
+    {% include "frontend/header.html" %}
+
+    <script type="text/template" id="trTpl">
+        {@if !noData}
+            {@each results as r}
+            <tr>
+                <td class="titleTd1">
+                    {@if r.status==0}
+                    <a href="user/competitions/${r.id}/register" class="ellipsis">${r.name}</a>
+                    {@else}
+                    <a href="user/competitions/${r.id}" class="ellipsis">${r.name}</a>
+                    {@/if}
+                </td>
+                <td>${r.athletic_item.name}</td>
+                <td>${r.typeTxt}</td>
+                <td>${r.statusTxt}</td>
+                <td>
+                    {@if r.c_type==1&&r.status==0}
+                    <a class="promote" href="${r.id}">申请为联赛</a>
+                    {@/if}
+                </td>
+            </tr>
+            {@/each}
+        {@else}
+        <tr>
+            <td colspan="5">${noData}</td>
+        </tr>
+        {@/if}
+
+    </script>
+
+
+
+    <div class="section section3">
+        <h2 class="singleTitle icon7">我的赛事</h2>
+
+        <table class="table" id="myTable">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>项目</th>
+                <th>类型</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <a href="user/competitions/create-activity" class="btn centerBtn">新建</a>
+    </div>
+
+
+    {% include "frontend/footer.html" %}
+
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/juicer-min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/myCompetitions.js"></script>
+</body>
+</html>

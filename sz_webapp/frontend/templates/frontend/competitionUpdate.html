@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include "frontend/head.html" %}
+    <link href="static/css/frontend/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/lib/date_input.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/main.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/icon.css" type="text/css" rel="stylesheet">
+    <link href="static/css/frontend/src/list.css" type="text/css" rel="stylesheet">
+    <script>
+        var pageName="competition";
+        var currentUserId="{{current_user.id}}";
+    </script>
+</head>
+<body>
+<div class="container">
+
+    {% include "frontend/header.html" %}
+
+    <div class="section">
+        <h2 class="singleTitle icon7">发布赛事</h2>
+        <div class="content">
+            {% if competition.id %}
+            <form class="hForm col2" id="myForm" action="user/competitions/{{competition.id}}/update" method="post">
+
+                {% else %}
+                <form class="hForm col2" id="myForm" action="user/competitions/create-activity" method="post">
+                    {% endif %}
+
+                <div class="leftCol leftCol1"  id="thumbUploadContainer">
+                    {% if competition.logo %}
+                    <img id="thumbShow" style="max-height: 210px;" class="widthAll"  src="{{competition.logo}}">
+
+                    {% else %}
+                    <img id="thumbShow" style="max-height: 210px;" class="widthAll"  src="static/images/frontend/default/teamLogo.png">
+                    {% endif %}
+
+                    <input type="hidden" name="logo" id="thumb" value="{{competition.logo}}">
+                    <input type="button" id="thumbUploadBtn" value="上传" class="btn centerBtn">
+                    <p class="tColor1 tip1">建议大小1:1的jpg、png图片，不大于500x500px</p>
+                </div>
+
+                <div class="rightCol rightCol1">
+                    <div class="formRow">
+                        <label class="formLabel">名称*:</label>
+                        <input class="formInput" type="text" name="name" value="{{competition.name}}">
+                    </div>
+
+                    {% if not competition.id %}
+                    <div class="formRow">
+                        {% else %}
+                        <div class="formRow hidden">
+                            {% endif %}
+                        <label class="formLabel">项目*:</label>
+                        <select class="formInput" name="athletic_item_id" id="category">
+                            <option value="">请选择</option>
+                            {% for ai in athletic_items %}
+                                {% if ai.id==competition.athletic_item_id %}
+                                <option value="{{ai.id}}" selected data-logo="{{ai.logo}}">{{ai.name}}</option>
+                                {% else %}
+                                <option value="{{ai.id}}" data-logo="{{ai.logo}}">{{ai.name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    {% if not competition.id %}
+                    <div class="formRow">
+                        {% else %}
+                        <div class="formRow hidden">
+                            {% endif %}
+                        <label class="formLabel">球队报名*:</label>
+                        <!--后台需要的是是否可以个人参赛-->
+                        <select class="formInput" name="individual" id="requireTeam">
+                            <option value="">请选择</option>
+                            {% for status in [{"name":"是","value":"false"},{"name":"否","value":"true"}] %}
+                            {% if competition.options and status.value== competition.options.individual %}
+                            <option selected value="{{status.value}}">{{status.name}}</option>
+                            {%  else %}
+                            <option value="{{status.value}}">{{status.name}}</option>
+                            {% endif %}
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">开赛时间*:</label>
+                        <input  class="formInput" type="text" name="date_started" id="startDate"
+                                value="{{competition.date_started}}">
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">报名截止*:</label>
+                        <input  class="formInput" type="text" name="date_reg_end" id="deadline" value="{{competition.date_reg_end}}">
+                    </div>
+                    <div class="formRow" id="selectGroup">
+                        <label class="formLabel">省市*:</label>
+                        <select class="formInput formInput1 province" name="loc_state" data-value="{{competition.loc_state}}">
+                        </select>
+                        <select class="formInput formInput1 city" name="loc_city" data-value="{{competition.loc_city}}">
+                        </select>
+                        <select class="formInput formInput1 area" name="area" data-value="{{competition.loc_country}}">
+                        </select>
+                    </div>
+                    <div class="formRow">
+                        <label class="formLabel">地点/场馆:</label>
+                        <input  class="formInput" type="text" name="site" value="{{competition.site}}">
+                    </div>
+                </div>
+                <div class="formRow" style="margin-top: 50px;">
+                    <label class="formLabel">联系方式*:</label>
+                    <input  class="formInput" type="text" name="contact_me" value="{{competition.contact_me}}">
+                </div>
+                <div class="formRow" >
+                    <label class="formLabel">主办单位:</label>
+                    <input  class="formInput" type="text" name="host" value="{{competition.host}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">承办单位:</label>
+                    <input  class="formInput" type="text" name="organizer"  value="{{competition.organizer}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">赞助商:</label>
+                    <input  class="formInput" type="text" name="sponsor"  value="{{competition.sponsor}}">
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">描述:</label>
+                    <textarea class="formInput formTxtArea" name="intro">{{competition.intro}}</textarea>
+                </div>
+                <div class="formRow">
+                    <label class="formLabel">参赛要求:</label>
+                    <textarea class="formInput formTxtArea" name="requirement">{{competition.requirement}}</textarea>
+                </div>
+
+                <input type="submit" value="提交" class="btn centerBtn">
+            </form>
+        </div>
+    </div>
+
+    {% include "frontend/footer.html" %}
+</div>
+
+{% include "frontend/loading.html" %}
+
+<script src="static/js/frontend/lib/jquery-1.11.1.min.js"></script>
+<script src="static/js/frontend/lib/jquery.serialize-object.min.js"></script>
+<script src="static/js/frontend/lib/jquery.cxselect.min.js"></script>
+<script src="static/js/frontend/lib/jquery.date_input.js"></script>
+<script src="static/lang/frontend/jquery.date_input.zh_CN.js"></script>
+<script src="static/js/frontend/lib/jquery.validate.min.js"></script>
+<script src="static/js/frontend/lib/jquery.toastmessage.js"></script>
+<script src="static/js/frontend/lib/qiniu.js"></script>
+<script src="static/js/frontend/lib/plupload.full.min.js"></script>
+<script src="static/js/frontend/src/config.js"></script>
+<script src="static/js/frontend/src/functions.js"></script>
+<script src="static/js/frontend/src/competitionUpdate.js"></script>
+</body>
+</html>
