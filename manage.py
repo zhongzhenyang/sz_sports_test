@@ -1,4 +1,5 @@
 # coding:utf-8
+# add some comments
 
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
